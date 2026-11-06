@@ -1,0 +1,22 @@
+PODS:
+  - aktujo_bridge (0.0.1):
+    - FlutterMacOS
+  - FlutterMacOS (1.0.0)
+
+DEPENDENCIES:
+  - aktujo_bridge (from `Flutter/ephemeral/.symlinks/plugins/aktujo_bridge/macos`)
+  - FlutterMacOS (from `Flutter/ephemeral`)
+
+EXTERNAL SOURCES:
+  aktujo_bridge:
+    :path: Flutter/ephemeral/.symlinks/plugins/aktujo_bridge/macos
+  FlutterMacOS:
+    :path: Flutter/ephemeral
+
+SPEC CHECKSUMS:
+  aktujo_bridge: 0bb030e6affa1df04f8953ec843d60deb0d811d5
+  FlutterMacOS: c232990155153907050900a2e175c7773903ba4e
+
+PODFILE CHECKSUM: f812b22ad5025189f23bb23c0da20011d547f06e
+
+COCOAPODS: 1.17.0

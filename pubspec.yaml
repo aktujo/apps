@@ -1,0 +1,41 @@
+# SPDX-License-Identifier: MIT
+# aktujo's app for macOS, iOS, Linux, Android and Windows (aktujo/aktujo, docs/rfc/0006-apps-and-sdk.md).
+# Dependencies are exact and at least two weeks old when taken; the Rust side is in rust/, built by cargokit through
+# the plugin in rust_builder/.
+name: aktujo
+description: "aktujo on desktops and phones: scan, file, find – your documents, kept safe."
+publish_to: 'none'
+version: 0.2.0+1
+
+environment:
+  sdk: ^3.13.7
+
+dependencies:
+  aktujo_bridge:
+    path: rust_builder
+  file_selector: 1.1.0
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_rust_bridge: 2.13.0
+  flutter_secure_storage: 11.2.0
+  intl: any
+  path_provider: 2.1.6
+
+dev_dependencies:
+  flutter_lints: 6.0.0
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  generate: true
+  # Headings in Space Mono, as aktujo/brand has them (assets/fonts, OFL-1.1).
+  fonts:
+    - family: Space Mono
+      fonts:
+        - asset: assets/fonts/SpaceMono-Bold.ttf
+          weight: 700

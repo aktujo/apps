@@ -1,0 +1,155 @@
+# SPDX-License-Identifier: MIT
+# The app on all five platforms at once (aktujo/aktujo, docs/rfc/0006-apps-and-sdk.md): the Rust side tested and its
+# dependencies checked; the bindings and translations generated and compared; format, analysis and tests of Dart; a
+# build for macOS, iOS (simulator), Linux, Android and Windows. aktujo's SDK comes from crates.io. Flutter comes from
+# its repository at the version named here, Rust from rust/rust-toolchain.toml. The licence check (REUSE) and the
+# sign-off (DCO) come from falkoss/starterpack, pinned by commit; actions are pinned by commit, with the version as a
+# comment.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  FLUTTER_VERSION: 3.47.8
+  FRB_VERSION: 2.13.0
+  CARGO_EXPAND_VERSION: 1.0.127
+
+jobs:
+  rust:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps/rust
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: apps
+      - name: Rust toolchain from rust-toolchain.toml
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@2201cc584a476d1b508be977bbe4b7d1c7a52e9c # v2.9.3
+        with:
+          workspaces: apps/rust
+      - run: cargo fmt --check
+      - run: cargo clippy --locked --all-targets -- -D warnings
+      - run: cargo test --locked
+
+  deps:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: apps
+      - uses: EmbarkStudios/cargo-deny-action@3c6349835b2b7b196a839186cb8b78e02f7b5f25 # v2.1.1
+        with:
+          manifest-path: apps/rust/Cargo.toml
+
+  apple:
+    runs-on: macos-latest
+    defaults:
+      run:
+        working-directory: apps
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: apps
+      - name: Flutter
+        run: |
+          git clone --depth 1 --branch "$FLUTTER_VERSION" https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - name: Rust toolchain from rust-toolchain.toml
+        working-directory: apps/rust
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@2201cc584a476d1b508be977bbe4b7d1c7a52e9c # v2.9.3
+        with:
+          workspaces: apps/rust
+      - run: flutter pub get --enforce-lockfile
+      - name: Bindings (flutter_rust_bridge) and translations up to date
+        run: |
+          cargo install --locked "flutter_rust_bridge_codegen@$FRB_VERSION" "cargo-expand@$CARGO_EXPAND_VERSION"
+          flutter_rust_bridge_codegen generate
+          (cd rust && cargo fmt)
+          flutter gen-l10n
+          git diff --exit-code lib/src/rust rust/src/frb_generated.rs lib/l10n
+      - run: dart format --output=none --set-exit-if-changed lib integration_test
+      - run: flutter analyze
+      - run: flutter build macos --debug
+      - run: flutter build ios --simulator --debug
+
+  desktop:
+    strategy:
+      fail-fast: false
+      matrix:
+        runner: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.runner }}
+    defaults:
+      run:
+        shell: bash
+        working-directory: apps
+    steps:
+      - run: git config --global core.autocrlf false
+        working-directory: .
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: apps
+      - name: Flutter
+        run: |
+          git clone --depth 1 --branch "$FLUTTER_VERSION" https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+          # Git Bash on Windows runs the batch file, not the shell script.
+          if [[ "$RUNNER_OS" == Windows ]]; then echo "FLUTTER=flutter.bat" >> "$GITHUB_ENV"; else echo "FLUTTER=flutter" >> "$GITHUB_ENV"; fi
+      - name: Libraries for Linux – GTK and the Secret Service
+        if: runner.os == 'Linux'
+        run: sudo apt-get update && sudo apt-get install -y clang cmake ninja-build pkg-config libgtk-3-dev libsecret-1-dev
+      # OpenSSL (vendored, for SQLCipher) is configured with Perl: on Windows the native Strawberry Perl, not Git's.
+      - if: runner.os == 'Windows'
+        run: echo "OPENSSL_SRC_PERL=C:/Strawberry/perl/bin/perl.exe" >> "$GITHUB_ENV"
+      - name: Rust toolchain from rust-toolchain.toml
+        working-directory: apps/rust
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@2201cc584a476d1b508be977bbe4b7d1c7a52e9c # v2.9.3
+        with:
+          workspaces: apps/rust
+      - run: $FLUTTER pub get --enforce-lockfile
+      - name: Build
+        run: |
+          if [[ "$RUNNER_OS" == Windows ]]; then "$FLUTTER" build windows --debug; else "$FLUTTER" build linux --debug; fi
+
+  android:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: apps
+    env:
+      CARGO_PROFILE_DEV_DEBUG: "0"
+    steps:
+      - name: Room on the disk – tools of the runner the build does not use
+        working-directory: .
+        run: sudo rm -rf /usr/share/dotnet /opt/ghc /usr/local/share/boost /usr/local/.ghcup "$AGENT_TOOLSDIRECTORY/CodeQL" && df -h /
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          path: apps
+      - name: Flutter
+        run: |
+          git clone --depth 1 --branch "$FLUTTER_VERSION" https://github.com/flutter/flutter.git "$RUNNER_TEMP/flutter"
+          echo "$RUNNER_TEMP/flutter/bin" >> "$GITHUB_PATH"
+      - name: Rust toolchain from rust-toolchain.toml
+        working-directory: apps/rust
+        run: rustup toolchain install
+      - uses: Swatinem/rust-cache@2201cc584a476d1b508be977bbe4b7d1c7a52e9c # v2.9.3
+        with:
+          workspaces: apps/rust
+      - run: flutter pub get --enforce-lockfile
+      # One architecture is enough to see that it builds.
+      - run: flutter build apk --debug --target-platform android-arm64
+
+  licences:
+    uses: falkoss/starterpack/.github/workflows/reuse.yml@8fba58423b0b95131b436cb2edcb91adad742d71
+  sign-off:
+    uses: falkoss/starterpack/.github/workflows/dco.yml@8fba58423b0b95131b436cb2edcb91adad742d71

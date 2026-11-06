@@ -1,0 +1,36 @@
+# SPDX-License-Identifier: MIT
+# The Rust side of aktujo's apps: what Dart calls through flutter_rust_bridge (`src/api/`), on aktujo's SDK
+# (`aktujo-sdk`, MIT – docs/rfc/0006-apps-and-sdk.md in aktujo/aktujo). A workspace of its own; dependencies are exact
+# (`=`), permissive (`deny.toml`) and at least two weeks old when taken.
+[workspace]
+
+[package]
+name = "aktujo_bridge"
+version = "0.2.0"
+edition = "2024"
+rust-version = "1.94"
+license = "MIT"
+repository = "https://github.com/aktujo/apps"
+description = "The Rust side of aktujo's apps: the archive on the device, called from Dart"
+publish = false
+
+[lib]
+crate-type = ["cdylib", "staticlib", "rlib"]
+
+[dependencies]
+# aktujo's SDK: the archive on the device – from crates.io, in the version of aktujo's release.
+aktujo-sdk = { version = "=0.3.0", default-features = false, features = ["scan"] }
+flutter_rust_bridge = "=2.13.0"
+
+[dev-dependencies]
+# A relay in the test of synchronising (MIT, released with the SDK).
+aktujo-crypt = "=0.3.0"
+aktujo-relay = "=0.3.0"
+tokio = { version = "=1.54.1", features = ["rt-multi-thread", "net"] }
+
+[lints.rust]
+unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }
+missing_debug_implementations = "warn"
+
+[lints.clippy]
+all = { level = "warn", priority = -1 }

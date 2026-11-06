@@ -1,0 +1,104 @@
+{
+  "@@locale": "en",
+  "appTitle": "aktujo",
+  "tagline": "Your documents, kept safe – end to end.",
+  "spaces": "Spaces",
+  "newSpace": "New space",
+  "spaceName": "Name of the space",
+  "found": "Found",
+  "firstSpace": "Name your first space – a private archive, for example. More can follow.",
+  "documents": "Documents",
+  "bin": "Bin",
+  "search": "Search",
+  "addFiles": "Add files",
+  "added": "{n} added",
+  "@added": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "noDocuments": "No documents yet. Add PDFs or images.",
+  "nothingFound": "Nothing found.",
+  "waiting": "waits to be read",
+  "reading": "is being read",
+  "failed": "could not be read",
+  "title": "Title",
+  "save": "Save",
+  "cancel": "Cancel",
+  "labels": "Labels",
+  "addLabel": "Add a label",
+  "versions": "Versions",
+  "fields": "Fields",
+  "text": "Text",
+  "noText": "No text read yet.",
+  "toBin": "Into the bin",
+  "fromBin": "Out of the bin",
+  "suggested": "suggested",
+  "error": "Something went wrong: {message}",
+  "@error": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "sync": "Sync and sharing",
+  "syncHint": "Keep this space in step with your other devices – and share it with other people – through a relay you run yourself (aktujo relay). Everything is end-to-end encrypted: the relay sees nothing.",
+  "relay": "Address of the relay",
+  "deviceName": "Name of this device",
+  "deviceNameHint": "The other members see it – \"Laptop\" or \"Anna's phone\", for example.",
+  "startSync": "Start syncing",
+  "recoveryCode": "Recovery code",
+  "recoveryCodeHint": "Write it down and keep it on paper. It is shown only now. Without it and without a device of this space, the space is lost.",
+  "done": "Done",
+  "syncNow": "Sync now",
+  "syncedAt": "Synced {time}",
+  "@syncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notSynced": "Not synced since the app started.",
+  "syncResult": "{received} received, {sent} sent",
+  "@syncResult": {
+    "placeholders": {
+      "received": {
+        "type": "int"
+      },
+      "sent": {
+        "type": "int"
+      }
+    }
+  },
+  "waitingToBeAdded": "Waiting to be added by a device that manages this space.",
+  "invite": "Invite",
+  "inviteHint": "An invitation for another device or person, good for a day. Send it on a safe way.",
+  "invitation": "Invitation",
+  "copy": "Copy",
+  "copied": "Copied",
+  "rightsRead": "may read",
+  "rightsWrite": "may read and write",
+  "rightsManage": "may manage",
+  "members": "Members",
+  "removeMember": "Remove",
+  "removeMemberConfirm": "Remove {name}? It gets nothing written after.",
+  "@removeMemberConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "recoveryMember": "Recovery code",
+  "join": "Join a space",
+  "joinHint": "Paste an invitation you were given.",
+  "joining": "Asked to join – the space arrives once a device that manages it has added this one.",
+  "recover": "Bring a space back",
+  "recoverHint": "With its recovery code, when no device of it is left.",
+  "spaceId": "Identity of the space",
+  "code": "Recovery code"
+}

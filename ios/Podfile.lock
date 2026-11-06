@@ -1,0 +1,22 @@
+PODS:
+  - aktujo_bridge (0.0.1):
+    - Flutter
+  - Flutter (1.0.0)
+
+DEPENDENCIES:
+  - aktujo_bridge (from `.symlinks/plugins/aktujo_bridge/ios`)
+  - Flutter (from `Flutter`)
+
+EXTERNAL SOURCES:
+  aktujo_bridge:
+    :path: ".symlinks/plugins/aktujo_bridge/ios"
+  Flutter:
+    :path: Flutter
+
+SPEC CHECKSUMS:
+  aktujo_bridge: a84274e8b87bef23183e7baca659ba67da046bf0
+  Flutter: 71a624a5bc0c04062bf19101d501e466baf2fb47
+
+PODFILE CHECKSUM: a394d919de395c9fbe4659aa0269b3b141540e13
+
+COCOAPODS: 1.17.0
