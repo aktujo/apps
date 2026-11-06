@@ -100,5 +100,85 @@
   "recover": "Bring a space back",
   "recoverHint": "With its recovery code, when no device of it is left.",
   "spaceId": "Identity of the space",
-  "code": "Recovery code"
+  "code": "Recovery code",
+  "kind": "Kind",
+  "noKind": "No kind",
+  "suggestedKind": "Suggested: {kind}",
+  "@suggestedKind": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "confirm": "Confirm",
+  "confirmSuggestions": "Confirm suggestions",
+  "noValue": "–",
+  "hintDate": "YYYY-MM-DD",
+  "hintMoney": "12.50 EUR",
+  "hintNumber": "12.5",
+  "hintFlag": "yes or no",
+  "kinds": "Kinds",
+  "kindsHint": "The kinds of documents of this space – their fields, and the words that speak for them. aktujo has none built in: make your own, or take a template from a catalog.",
+  "noKinds": "No kinds yet. Add one, or take a template from a catalog.",
+  "addKind": "Add a kind",
+  "kindName": "Name of the kind",
+  "rename": "Rename",
+  "remove": "Remove",
+  "removeKindConfirm": "Remove the kind {name}? Documents keep it as their kind.",
+  "@removeKindConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "addField": "Add a field",
+  "fieldName": "Name of the field",
+  "fieldType": "Type",
+  "typeText": "text",
+  "typeDate": "date",
+  "typeMoney": "amount",
+  "typeNumber": "number",
+  "typeFlag": "yes / no",
+  "words": "Words",
+  "wordsHint": "Words in a document that speak for this kind; a kind is suggested from 6.",
+  "addWord": "Add a word",
+  "word": "Word",
+  "weight": "Weight",
+  "importKinds": "Import a file of kinds",
+  "imported": "{n} kinds changed",
+  "@imported": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "catalog": "Catalog",
+  "catalogHint": "Templates of kinds from the catalogs you use – read now. Taking one over adds its kinds; kinds you changed keep your changes.",
+  "standingNew": "new",
+  "standingTaken": "taken",
+  "standingUpdate": "update available",
+  "take": "Take over",
+  "update": "Update",
+  "plan": "What happens",
+  "stepNew": "added",
+  "stepSame": "unchanged",
+  "stepReplace": "replaced",
+  "stepMerge": "merged, your changes kept",
+  "stepGone": "no longer in the template – kept",
+  "keptHere": "kept as here: {items}",
+  "@keptHere": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "sources": "Sources",
+  "sourcesHint": "Catalogs this device reads templates from. The official one can be switched off.",
+  "addSource": "Add a source",
+  "sourceAddress": "Address (https://…)",
+  "official": "official"
 }

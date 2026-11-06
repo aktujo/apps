@@ -209,4 +209,170 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get code => 'Recovery code';
+
+  @override
+  String get kind => 'Kind';
+
+  @override
+  String get noKind => 'No kind';
+
+  @override
+  String suggestedKind(String kind) {
+    return 'Suggested: $kind';
+  }
+
+  @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get confirmSuggestions => 'Confirm suggestions';
+
+  @override
+  String get noValue => '–';
+
+  @override
+  String get hintDate => 'YYYY-MM-DD';
+
+  @override
+  String get hintMoney => '12.50 EUR';
+
+  @override
+  String get hintNumber => '12.5';
+
+  @override
+  String get hintFlag => 'yes or no';
+
+  @override
+  String get kinds => 'Kinds';
+
+  @override
+  String get kindsHint =>
+      'The kinds of documents of this space – their fields, and the words that speak for them. aktujo has none built in: make your own, or take a template from a catalog.';
+
+  @override
+  String get noKinds => 'No kinds yet. Add one, or take a template from a catalog.';
+
+  @override
+  String get addKind => 'Add a kind';
+
+  @override
+  String get kindName => 'Name of the kind';
+
+  @override
+  String get rename => 'Rename';
+
+  @override
+  String get remove => 'Remove';
+
+  @override
+  String removeKindConfirm(String name) {
+    return 'Remove the kind $name? Documents keep it as their kind.';
+  }
+
+  @override
+  String get addField => 'Add a field';
+
+  @override
+  String get fieldName => 'Name of the field';
+
+  @override
+  String get fieldType => 'Type';
+
+  @override
+  String get typeText => 'text';
+
+  @override
+  String get typeDate => 'date';
+
+  @override
+  String get typeMoney => 'amount';
+
+  @override
+  String get typeNumber => 'number';
+
+  @override
+  String get typeFlag => 'yes / no';
+
+  @override
+  String get words => 'Words';
+
+  @override
+  String get wordsHint => 'Words in a document that speak for this kind; a kind is suggested from 6.';
+
+  @override
+  String get addWord => 'Add a word';
+
+  @override
+  String get word => 'Word';
+
+  @override
+  String get weight => 'Weight';
+
+  @override
+  String get importKinds => 'Import a file of kinds';
+
+  @override
+  String imported(int n) {
+    return '$n kinds changed';
+  }
+
+  @override
+  String get catalog => 'Catalog';
+
+  @override
+  String get catalogHint =>
+      'Templates of kinds from the catalogs you use – read now. Taking one over adds its kinds; kinds you changed keep your changes.';
+
+  @override
+  String get standingNew => 'new';
+
+  @override
+  String get standingTaken => 'taken';
+
+  @override
+  String get standingUpdate => 'update available';
+
+  @override
+  String get take => 'Take over';
+
+  @override
+  String get update => 'Update';
+
+  @override
+  String get plan => 'What happens';
+
+  @override
+  String get stepNew => 'added';
+
+  @override
+  String get stepSame => 'unchanged';
+
+  @override
+  String get stepReplace => 'replaced';
+
+  @override
+  String get stepMerge => 'merged, your changes kept';
+
+  @override
+  String get stepGone => 'no longer in the template – kept';
+
+  @override
+  String keptHere(String items) {
+    return 'kept as here: $items';
+  }
+
+  @override
+  String get sources => 'Sources';
+
+  @override
+  String get sourcesHint => 'Catalogs this device reads templates from. The official one can be switched off.';
+
+  @override
+  String get addSource => 'Add a source';
+
+  @override
+  String get sourceAddress => 'Address (https://…)';
+
+  @override
+  String get official => 'official';
 }

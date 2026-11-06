@@ -7,17 +7,32 @@ import '../frb_generated.dart';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `changed`, `document_id`, `hex`, `item`, `lock`, `member_item`, `optional`, `reading_name`, `rights_name`, `rights_of`, `show`, `space_id`, `unhex`
+// These functions are ignored because they are not marked as `pub`: `change_kind`, `changed`, `document_id`, `hex`, `item`, `language`, `lock`, `member_item`, `optional`, `reading_name`, `rights_name`, `rights_of`, `show`, `space_id`, `step_name`, `type_name`, `type_of`, `unhex`, `value_of`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `HandedKey`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Archive>>
 abstract class Archive implements RustOpaqueInterface {
+  /// Adds a field to a kind – its key made from its name – of a type: `text`, `date`, `money`, `number`, `flag`.
+  Future<void> addField({required String space, required String kind, required String name, required String fieldType});
+
   /// Adds files by their paths; returns how many were new.
   Future<int> addFiles({required String space, required List<String> paths});
 
+  /// Adds a kind with a name and no fields; returns its identity.
+  Future<String> addKind({required String space, required String name});
+
   /// Adds a label.
   Future<void> addLabel({required String space, required String document, required String label});
+
+  /// Adds a source (HTTPS, or HTTP on this device), switched on.
+  Future<void> addSource({required String url});
+
+  /// The templates of every source that is on – read now, over the network – and how they stand for a space.
+  Future<CatalogItem> catalog({required String space});
+
+  /// Confirms what was suggested: the kind, if none is confirmed, and every suggested field.
+  Future<void> confirmSuggestions({required String space, required String document});
 
   /// The name people read for this device, if it was given one.
   Future<String?> deviceName();
@@ -31,6 +46,9 @@ abstract class Archive implements RustOpaqueInterface {
   /// Founds a space; returns its identity.
   Future<String> foundSpace({required String name});
 
+  /// Takes over a file of kinds – a template, an export of a space, a list of kinds; returns how many changed.
+  Future<int> importKinds({required String space, required String path});
+
   /// An invitation for another device – the person's own or someone else's – with `rights` (`read`, `write`,
   /// `manage`), good for a day.
   Future<String> invite({required String space, required String rights});
@@ -41,6 +59,9 @@ abstract class Archive implements RustOpaqueInterface {
 
   /// The key of the data folder, for Dart to keep.
   String key();
+
+  /// The kinds of a space, by their name.
+  Future<List<KindItem>> kinds({required String space});
 
   /// The members of a synchronised space, as its relay lists them.
   Future<List<MemberItem>> members({required String space});
@@ -55,20 +76,50 @@ abstract class Archive implements RustOpaqueInterface {
   /// Brings a space back with its recovery code, when no device of it is left.
   Future<SyncItem> recover({required String relay, required String space, required String code, String? name});
 
+  /// Takes a field off a kind; documents keep their values.
+  Future<void> removeField({required String space, required String kind, required String key});
+
+  /// Removes a kind; documents keep it as their kind.
+  Future<void> removeKind({required String space, required String kind});
+
   /// Takes a label off.
   Future<void> removeLabel({required String space, required String document, required String label});
 
   /// Removes a member by its identity; it gets nothing written after. Returns its name.
   Future<String> removeMember({required String space, required String member});
 
+  /// Removes a source – not the official one.
+  Future<void> removeSource({required String url});
+
+  /// Renames a kind.
+  Future<void> renameKind({required String space, required String kind, required String name});
+
   /// Gives this device a name people read – the other members of a space see it.
   Future<void> setDeviceName({required String name});
+
+  /// Confirms the value of a field, given as text (see [`FieldItem::field_type`]); empty clears it.
+  Future<void> setField({required String space, required String document, required String key, required String text});
+
+  /// Confirms the kind of a document – or that it has none.
+  Future<void> setKind({required String space, required String document, String? kind});
+
+  /// The language names of kinds and fields are given in (`en`, `de` …).
+  void setLanguage({required String language});
+
+  /// Switches a source on or off.
+  Future<void> setSource({required String url, required bool active});
 
   /// Gives a document a new title.
   Future<void> setTitle({required String space, required String document, required String title});
 
   /// Puts a document into the bin, or takes it out.
   Future<void> setTrashed({required String space, required String document, required bool trashed});
+
+  /// Sets the weight of a word that speaks for a kind; 0 takes it off.
+  Future<void> setWord({required String space, required String kind, required String word, required int weight});
+
+  /// The sources of templates on this device: the official catalog first.
+  Future<List<SourceItem>> sources();
 
   /// The spaces, in the order they were founded or joined.
   Future<List<SpaceItem>> spaces();
@@ -79,21 +130,63 @@ abstract class Archive implements RustOpaqueInterface {
 
   /// Synchronises a space now.
   Future<SyncItem> syncNow({required String space});
+
+  /// What taking a template over would do to the kinds of a space – or, with `take`, does it: kinds new are added,
+  /// kinds a person changed are merged with the changes kept, kinds gone from the template are kept.
+  Future<List<PlannedItem>> takeTemplate({
+    required String space,
+    required String source,
+    required String id,
+    required bool take,
+  });
+}
+
+/// The templates of every source that is on, and the sources that could not be read.
+class CatalogItem {
+  final List<TemplateItem> templates;
+  final List<String> problems;
+
+  const CatalogItem({required this.templates, required this.problems});
+
+  @override
+  int get hashCode => templates.hashCode ^ problems.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is CatalogItem &&
+          runtimeType == other.runtimeType &&
+          templates == other.templates &&
+          problems == other.problems;
 }
 
 /// A document with what the detail page shows.
 class DocumentDetail {
   final DocumentItem item;
+
+  /// The kind a person confirmed, by its identity.
+  final String? kindId;
+
+  /// The kind suggested and not confirmed, by its identity.
+  final String? kindSuggested;
   final List<VersionItem> versions;
   final List<FieldItem> fields;
 
   /// What was read, pages split by an empty line; empty until it is read.
   final String text;
 
-  const DocumentDetail({required this.item, required this.versions, required this.fields, required this.text});
+  const DocumentDetail({
+    required this.item,
+    this.kindId,
+    this.kindSuggested,
+    required this.versions,
+    required this.fields,
+    required this.text,
+  });
 
   @override
-  int get hashCode => item.hashCode ^ versions.hashCode ^ fields.hashCode ^ text.hashCode;
+  int get hashCode =>
+      item.hashCode ^ kindId.hashCode ^ kindSuggested.hashCode ^ versions.hashCode ^ fields.hashCode ^ text.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -101,6 +194,8 @@ class DocumentDetail {
       other is DocumentDetail &&
           runtimeType == other.runtimeType &&
           item == other.item &&
+          kindId == other.kindId &&
+          kindSuggested == other.kindSuggested &&
           versions == other.versions &&
           fields == other.fields &&
           text == other.text;
@@ -166,17 +261,51 @@ class DocumentItem {
           excerpt == other.excerpt;
 }
 
-/// A field with its value as text.
+/// A field of a kind.
+class FieldDefItem {
+  final String key;
+  final String name;
+  final String fieldType;
+
+  const FieldDefItem({required this.key, required this.name, required this.fieldType});
+
+  @override
+  int get hashCode => key.hashCode ^ name.hashCode ^ fieldType.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is FieldDefItem &&
+          runtimeType == other.runtimeType &&
+          key == other.key &&
+          name == other.name &&
+          fieldType == other.fieldType;
+}
+
+/// A field of a document: those of its kind, and any other it has a value for.
 class FieldItem {
   final String key;
   final String name;
-  final String value;
-  final bool confirmed;
 
-  const FieldItem({required this.key, required this.name, required this.value, required this.confirmed});
+  /// `text`, `date` (`YYYY-MM-DD`), `money` (`12.50 EUR`), `number` or `flag` (`yes`, `no`).
+  final String fieldType;
+
+  /// The confirmed value as text; empty if none was confirmed.
+  final String value;
+
+  /// What was read from the document and not confirmed yet.
+  final String? suggested;
+
+  const FieldItem({
+    required this.key,
+    required this.name,
+    required this.fieldType,
+    required this.value,
+    this.suggested,
+  });
 
   @override
-  int get hashCode => key.hashCode ^ name.hashCode ^ value.hashCode ^ confirmed.hashCode;
+  int get hashCode => key.hashCode ^ name.hashCode ^ fieldType.hashCode ^ value.hashCode ^ suggested.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -185,8 +314,34 @@ class FieldItem {
           runtimeType == other.runtimeType &&
           key == other.key &&
           name == other.name &&
+          fieldType == other.fieldType &&
           value == other.value &&
-          confirmed == other.confirmed;
+          suggested == other.suggested;
+}
+
+/// A kind of document of a space.
+class KindItem {
+  final String id;
+
+  /// Its name in the app's language.
+  final String name;
+  final List<FieldDefItem> fields;
+  final List<WordItem> words;
+
+  const KindItem({required this.id, required this.name, required this.fields, required this.words});
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode ^ fields.hashCode ^ words.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is KindItem &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          fields == other.fields &&
+          words == other.words;
 }
 
 /// A member of a synchronised space.
@@ -216,6 +371,58 @@ class MemberItem {
           name == other.name &&
           role == other.role &&
           rights == other.rights;
+}
+
+/// What taking a template over does, or did, to one kind.
+class PlannedItem {
+  final String id;
+  final String name;
+
+  /// `new`, `same`, `replace`, `merge` or `gone`.
+  final String step;
+
+  /// Items changed both here and in the template, kept as here.
+  final List<String> conflicts;
+
+  const PlannedItem({required this.id, required this.name, required this.step, required this.conflicts});
+
+  @override
+  int get hashCode => id.hashCode ^ name.hashCode ^ step.hashCode ^ conflicts.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is PlannedItem &&
+          runtimeType == other.runtimeType &&
+          id == other.id &&
+          name == other.name &&
+          step == other.step &&
+          conflicts == other.conflicts;
+}
+
+/// A source of templates on this device.
+class SourceItem {
+  final String url;
+
+  /// Whether it is read.
+  final bool active;
+
+  /// The official catalog: it can be switched off, not removed.
+  final bool official;
+
+  const SourceItem({required this.url, required this.active, required this.official});
+
+  @override
+  int get hashCode => url.hashCode ^ active.hashCode ^ official.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is SourceItem &&
+          runtimeType == other.runtimeType &&
+          url == other.url &&
+          active == other.active &&
+          official == other.official;
 }
 
 /// A space, as the list shows it.
@@ -307,6 +514,54 @@ class SyncItem {
           waiting == other.waiting;
 }
 
+/// A template of a catalog, as it stands for a space.
+class TemplateItem {
+  final String source;
+  final String sourceName;
+  final String id;
+  final String name;
+  final String description;
+
+  /// The names of its kinds.
+  final List<String> kinds;
+
+  /// `new`, `taken` or `update`.
+  final String standing;
+
+  const TemplateItem({
+    required this.source,
+    required this.sourceName,
+    required this.id,
+    required this.name,
+    required this.description,
+    required this.kinds,
+    required this.standing,
+  });
+
+  @override
+  int get hashCode =>
+      source.hashCode ^
+      sourceName.hashCode ^
+      id.hashCode ^
+      name.hashCode ^
+      description.hashCode ^
+      kinds.hashCode ^
+      standing.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is TemplateItem &&
+          runtimeType == other.runtimeType &&
+          source == other.source &&
+          sourceName == other.sourceName &&
+          id == other.id &&
+          name == other.name &&
+          description == other.description &&
+          kinds == other.kinds &&
+          standing == other.standing;
+}
+
 /// A version of a document.
 class VersionItem {
   final int number;
@@ -328,4 +583,20 @@ class VersionItem {
           name == other.name &&
           mediaType == other.mediaType &&
           size == other.size;
+}
+
+/// A word that speaks for a kind, with its weight.
+class WordItem {
+  final String word;
+  final int weight;
+
+  const WordItem({required this.word, required this.weight});
+
+  @override
+  int get hashCode => word.hashCode ^ weight.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is WordItem && runtimeType == other.runtimeType && word == other.word && weight == other.weight;
 }

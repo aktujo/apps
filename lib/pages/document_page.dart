@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../l10n/app_localizations.dart';
 import '../src/rust/api/archive.dart';
+import '../ui/dialogs.dart';
 
 /// A document: its title, labels, fields, versions and the text read from it; into the bin and out again.
 class DocumentPage extends StatefulWidget {
@@ -18,6 +19,7 @@ class DocumentPage extends StatefulWidget {
 
 class _DocumentPageState extends State<DocumentPage> {
   DocumentDetail? _detail;
+  List<KindItem> _kinds = [];
   String? _message;
   final _label = TextEditingController();
 
@@ -44,8 +46,31 @@ class _DocumentPageState extends State<DocumentPage> {
 
   Future<void> _load() async {
     final detail = await widget.archive.document(space: widget.space, document: widget.document);
-    if (mounted) setState(() => _detail = detail);
+    final kinds = await widget.archive.kinds(space: widget.space);
+    if (mounted) {
+      setState(() {
+        _detail = detail;
+        _kinds = kinds;
+      });
+    }
   }
+
+  Future<void> _editField(FieldItem field) async {
+    final l = AppLocalizations.of(context);
+    final text = await askText(
+      context,
+      title: field.name,
+      label: typeLabel(l, field.fieldType),
+      initial: field.value.isEmpty ? (field.suggested ?? '') : field.value,
+      hint: typeHint(l, field.fieldType),
+    );
+    if (text == null) return;
+    await _run(
+      () => widget.archive.setField(space: widget.space, document: widget.document, key: field.key, text: text),
+    );
+  }
+
+  String _kindName(String id) => _kinds.where((k) => k.id == id).map((k) => k.name).firstOrNull ?? id;
 
   Future<void> _rename(String title) async {
     final l = AppLocalizations.of(context);
@@ -118,6 +143,35 @@ class _DocumentPageState extends State<DocumentPage> {
               ),
             ],
           ),
+          const SizedBox(height: 16),
+          Text(l.kind, style: heading),
+          Row(
+            children: [
+              Expanded(
+                child: DropdownButton<String?>(
+                  isExpanded: true,
+                  value: _kinds.any((k) => k.id == detail.kindId) ? detail.kindId : null,
+                  hint: Text(l.noKind),
+                  items: [
+                    DropdownMenuItem<String?>(value: null, child: Text(l.noKind)),
+                    for (final kind in _kinds) DropdownMenuItem<String?>(value: kind.id, child: Text(kind.name)),
+                  ],
+                  onChanged: (kind) =>
+                      _run(() => widget.archive.setKind(space: widget.space, document: widget.document, kind: kind)),
+                ),
+              ),
+            ],
+          ),
+          if (detail.kindSuggested != null) Text(l.suggestedKind(_kindName(detail.kindSuggested!)), style: muted),
+          if (detail.kindSuggested != null || detail.fields.any((f) => f.suggested != null))
+            Align(
+              alignment: Alignment.centerLeft,
+              child: TextButton(
+                onPressed: () =>
+                    _run(() => widget.archive.confirmSuggestions(space: widget.space, document: widget.document)),
+                child: Text(l.confirmSuggestions),
+              ),
+            ),
           if (detail.fields.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(l.fields, style: heading),
@@ -125,7 +179,14 @@ class _DocumentPageState extends State<DocumentPage> {
               ListTile(
                 dense: true,
                 title: Text(field.name),
-                subtitle: Text(field.confirmed ? field.value : '${field.value} (${l.suggested})'),
+                subtitle: Text(
+                  [
+                    field.value.isEmpty ? l.noValue : field.value,
+                    if (field.suggested != null) '${field.suggested} (${l.suggested})',
+                  ].join(' · '),
+                ),
+                trailing: const Icon(Icons.edit, size: 18),
+                onTap: () => _editField(field),
               ),
           ],
           const SizedBox(height: 16),

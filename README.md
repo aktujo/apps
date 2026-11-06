@@ -9,7 +9,10 @@ in step between devices. One Flutter app for macOS, iOS, Linux, Android and Wind
 [RFC 0006](https://github.com/aktujo/aktujo/blob/main/docs/rfc/0006-apps-and-sdk.md).
 
 aktujo is at its beginning: the apps keep an archive on the device – its spaces and documents – and sync and share
-spaces through a relay you run yourself (`aktujo relay`): invitations with rights, joining, members, the recovery code. Their page will be
+spaces through a relay you run yourself (`aktujo relay`): invitations with rights, joining, members, the recovery code.
+Kinds of documents are the space's own – made in the app, imported from a file or taken from a catalog of templates
+(the official one, [aktujo/catalog](https://github.com/aktujo/catalog), and others) – with their fields, confirmed
+or suggested. Their page will be
 [aktujo.app](https://aktujo.app); until then the website is [aktujo.org](https://aktujo.org).
 
 ## Layout

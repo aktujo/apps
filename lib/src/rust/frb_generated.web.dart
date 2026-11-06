@@ -45,13 +45,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BigInt dco_decode_box_autoadd_u_64(dynamic raw);
 
   @protected
+  CatalogItem dco_decode_catalog_item(dynamic raw);
+
+  @protected
   DocumentDetail dco_decode_document_detail(dynamic raw);
 
   @protected
   DocumentItem dco_decode_document_item(dynamic raw);
 
   @protected
+  FieldDefItem dco_decode_field_def_item(dynamic raw);
+
+  @protected
   FieldItem dco_decode_field_item(dynamic raw);
+
+  @protected
+  KindItem dco_decode_kind_item(dynamic raw);
 
   @protected
   List<String> dco_decode_list_String(dynamic raw);
@@ -60,19 +69,37 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<DocumentItem> dco_decode_list_document_item(dynamic raw);
 
   @protected
+  List<FieldDefItem> dco_decode_list_field_def_item(dynamic raw);
+
+  @protected
   List<FieldItem> dco_decode_list_field_item(dynamic raw);
+
+  @protected
+  List<KindItem> dco_decode_list_kind_item(dynamic raw);
 
   @protected
   List<MemberItem> dco_decode_list_member_item(dynamic raw);
 
   @protected
+  List<PlannedItem> dco_decode_list_planned_item(dynamic raw);
+
+  @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  List<SourceItem> dco_decode_list_source_item(dynamic raw);
 
   @protected
   List<SpaceItem> dco_decode_list_space_item(dynamic raw);
 
   @protected
+  List<TemplateItem> dco_decode_list_template_item(dynamic raw);
+
+  @protected
   List<VersionItem> dco_decode_list_version_item(dynamic raw);
+
+  @protected
+  List<WordItem> dco_decode_list_word_item(dynamic raw);
 
   @protected
   MemberItem dco_decode_member_item(dynamic raw);
@@ -84,10 +111,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BigInt? dco_decode_opt_box_autoadd_u_64(dynamic raw);
 
   @protected
+  PlannedItem dco_decode_planned_item(dynamic raw);
+
+  @protected
+  SourceItem dco_decode_source_item(dynamic raw);
+
+  @protected
   SpaceItem dco_decode_space_item(dynamic raw);
 
   @protected
   SyncItem dco_decode_sync_item(dynamic raw);
+
+  @protected
+  TemplateItem dco_decode_template_item(dynamic raw);
 
   @protected
   int dco_decode_u_32(dynamic raw);
@@ -106,6 +142,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   VersionItem dco_decode_version_item(dynamic raw);
+
+  @protected
+  WordItem dco_decode_word_item(dynamic raw);
 
   @protected
   Archive sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(
@@ -132,13 +171,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
+  CatalogItem sse_decode_catalog_item(SseDeserializer deserializer);
+
+  @protected
   DocumentDetail sse_decode_document_detail(SseDeserializer deserializer);
 
   @protected
   DocumentItem sse_decode_document_item(SseDeserializer deserializer);
 
   @protected
+  FieldDefItem sse_decode_field_def_item(SseDeserializer deserializer);
+
+  @protected
   FieldItem sse_decode_field_item(SseDeserializer deserializer);
+
+  @protected
+  KindItem sse_decode_kind_item(SseDeserializer deserializer);
 
   @protected
   List<String> sse_decode_list_String(SseDeserializer deserializer);
@@ -147,19 +195,37 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<DocumentItem> sse_decode_list_document_item(SseDeserializer deserializer);
 
   @protected
+  List<FieldDefItem> sse_decode_list_field_def_item(SseDeserializer deserializer);
+
+  @protected
   List<FieldItem> sse_decode_list_field_item(SseDeserializer deserializer);
+
+  @protected
+  List<KindItem> sse_decode_list_kind_item(SseDeserializer deserializer);
 
   @protected
   List<MemberItem> sse_decode_list_member_item(SseDeserializer deserializer);
 
   @protected
+  List<PlannedItem> sse_decode_list_planned_item(SseDeserializer deserializer);
+
+  @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  List<SourceItem> sse_decode_list_source_item(SseDeserializer deserializer);
 
   @protected
   List<SpaceItem> sse_decode_list_space_item(SseDeserializer deserializer);
 
   @protected
+  List<TemplateItem> sse_decode_list_template_item(SseDeserializer deserializer);
+
+  @protected
   List<VersionItem> sse_decode_list_version_item(SseDeserializer deserializer);
+
+  @protected
+  List<WordItem> sse_decode_list_word_item(SseDeserializer deserializer);
 
   @protected
   MemberItem sse_decode_member_item(SseDeserializer deserializer);
@@ -171,10 +237,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   BigInt? sse_decode_opt_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
+  PlannedItem sse_decode_planned_item(SseDeserializer deserializer);
+
+  @protected
+  SourceItem sse_decode_source_item(SseDeserializer deserializer);
+
+  @protected
   SpaceItem sse_decode_space_item(SseDeserializer deserializer);
 
   @protected
   SyncItem sse_decode_sync_item(SseDeserializer deserializer);
+
+  @protected
+  TemplateItem sse_decode_template_item(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_32(SseDeserializer deserializer);
@@ -193,6 +268,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   VersionItem sse_decode_version_item(SseDeserializer deserializer);
+
+  @protected
+  WordItem sse_decode_word_item(SseDeserializer deserializer);
 
   @protected
   int sse_decode_i_32(SseDeserializer deserializer);
@@ -225,13 +303,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
 
   @protected
+  void sse_encode_catalog_item(CatalogItem self, SseSerializer serializer);
+
+  @protected
   void sse_encode_document_detail(DocumentDetail self, SseSerializer serializer);
 
   @protected
   void sse_encode_document_item(DocumentItem self, SseSerializer serializer);
 
   @protected
+  void sse_encode_field_def_item(FieldDefItem self, SseSerializer serializer);
+
+  @protected
   void sse_encode_field_item(FieldItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_kind_item(KindItem self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_String(List<String> self, SseSerializer serializer);
@@ -240,19 +327,37 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_list_document_item(List<DocumentItem> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_field_def_item(List<FieldDefItem> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_field_item(List<FieldItem> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_kind_item(List<KindItem> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_member_item(List<MemberItem> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_planned_item(List<PlannedItem> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_prim_u_8_strict(Uint8List self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_source_item(List<SourceItem> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_space_item(List<SpaceItem> self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_template_item(List<TemplateItem> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_version_item(List<VersionItem> self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_list_word_item(List<WordItem> self, SseSerializer serializer);
 
   @protected
   void sse_encode_member_item(MemberItem self, SseSerializer serializer);
@@ -264,10 +369,19 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_opt_box_autoadd_u_64(BigInt? self, SseSerializer serializer);
 
   @protected
+  void sse_encode_planned_item(PlannedItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_source_item(SourceItem self, SseSerializer serializer);
+
+  @protected
   void sse_encode_space_item(SpaceItem self, SseSerializer serializer);
 
   @protected
   void sse_encode_sync_item(SyncItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_template_item(TemplateItem self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_32(int self, SseSerializer serializer);
@@ -286,6 +400,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_version_item(VersionItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_word_item(WordItem self, SseSerializer serializer);
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer);

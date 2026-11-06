@@ -469,6 +469,318 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Recovery code'**
   String get code;
+
+  /// No description provided for @kind.
+  ///
+  /// In en, this message translates to:
+  /// **'Kind'**
+  String get kind;
+
+  /// No description provided for @noKind.
+  ///
+  /// In en, this message translates to:
+  /// **'No kind'**
+  String get noKind;
+
+  /// No description provided for @suggestedKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Suggested: {kind}'**
+  String suggestedKind(String kind);
+
+  /// No description provided for @confirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm'**
+  String get confirm;
+
+  /// No description provided for @confirmSuggestions.
+  ///
+  /// In en, this message translates to:
+  /// **'Confirm suggestions'**
+  String get confirmSuggestions;
+
+  /// No description provided for @noValue.
+  ///
+  /// In en, this message translates to:
+  /// **'–'**
+  String get noValue;
+
+  /// No description provided for @hintDate.
+  ///
+  /// In en, this message translates to:
+  /// **'YYYY-MM-DD'**
+  String get hintDate;
+
+  /// No description provided for @hintMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'12.50 EUR'**
+  String get hintMoney;
+
+  /// No description provided for @hintNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'12.5'**
+  String get hintNumber;
+
+  /// No description provided for @hintFlag.
+  ///
+  /// In en, this message translates to:
+  /// **'yes or no'**
+  String get hintFlag;
+
+  /// No description provided for @kinds.
+  ///
+  /// In en, this message translates to:
+  /// **'Kinds'**
+  String get kinds;
+
+  /// No description provided for @kindsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'The kinds of documents of this space – their fields, and the words that speak for them. aktujo has none built in: make your own, or take a template from a catalog.'**
+  String get kindsHint;
+
+  /// No description provided for @noKinds.
+  ///
+  /// In en, this message translates to:
+  /// **'No kinds yet. Add one, or take a template from a catalog.'**
+  String get noKinds;
+
+  /// No description provided for @addKind.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a kind'**
+  String get addKind;
+
+  /// No description provided for @kindName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name of the kind'**
+  String get kindName;
+
+  /// No description provided for @rename.
+  ///
+  /// In en, this message translates to:
+  /// **'Rename'**
+  String get rename;
+
+  /// No description provided for @remove.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove'**
+  String get remove;
+
+  /// No description provided for @removeKindConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the kind {name}? Documents keep it as their kind.'**
+  String removeKindConfirm(String name);
+
+  /// No description provided for @addField.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a field'**
+  String get addField;
+
+  /// No description provided for @fieldName.
+  ///
+  /// In en, this message translates to:
+  /// **'Name of the field'**
+  String get fieldName;
+
+  /// No description provided for @fieldType.
+  ///
+  /// In en, this message translates to:
+  /// **'Type'**
+  String get fieldType;
+
+  /// No description provided for @typeText.
+  ///
+  /// In en, this message translates to:
+  /// **'text'**
+  String get typeText;
+
+  /// No description provided for @typeDate.
+  ///
+  /// In en, this message translates to:
+  /// **'date'**
+  String get typeDate;
+
+  /// No description provided for @typeMoney.
+  ///
+  /// In en, this message translates to:
+  /// **'amount'**
+  String get typeMoney;
+
+  /// No description provided for @typeNumber.
+  ///
+  /// In en, this message translates to:
+  /// **'number'**
+  String get typeNumber;
+
+  /// No description provided for @typeFlag.
+  ///
+  /// In en, this message translates to:
+  /// **'yes / no'**
+  String get typeFlag;
+
+  /// No description provided for @words.
+  ///
+  /// In en, this message translates to:
+  /// **'Words'**
+  String get words;
+
+  /// No description provided for @wordsHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Words in a document that speak for this kind; a kind is suggested from 6.'**
+  String get wordsHint;
+
+  /// No description provided for @addWord.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a word'**
+  String get addWord;
+
+  /// No description provided for @word.
+  ///
+  /// In en, this message translates to:
+  /// **'Word'**
+  String get word;
+
+  /// No description provided for @weight.
+  ///
+  /// In en, this message translates to:
+  /// **'Weight'**
+  String get weight;
+
+  /// No description provided for @importKinds.
+  ///
+  /// In en, this message translates to:
+  /// **'Import a file of kinds'**
+  String get importKinds;
+
+  /// No description provided for @imported.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} kinds changed'**
+  String imported(int n);
+
+  /// No description provided for @catalog.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalog'**
+  String get catalog;
+
+  /// No description provided for @catalogHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Templates of kinds from the catalogs you use – read now. Taking one over adds its kinds; kinds you changed keep your changes.'**
+  String get catalogHint;
+
+  /// No description provided for @standingNew.
+  ///
+  /// In en, this message translates to:
+  /// **'new'**
+  String get standingNew;
+
+  /// No description provided for @standingTaken.
+  ///
+  /// In en, this message translates to:
+  /// **'taken'**
+  String get standingTaken;
+
+  /// No description provided for @standingUpdate.
+  ///
+  /// In en, this message translates to:
+  /// **'update available'**
+  String get standingUpdate;
+
+  /// No description provided for @take.
+  ///
+  /// In en, this message translates to:
+  /// **'Take over'**
+  String get take;
+
+  /// No description provided for @update.
+  ///
+  /// In en, this message translates to:
+  /// **'Update'**
+  String get update;
+
+  /// No description provided for @plan.
+  ///
+  /// In en, this message translates to:
+  /// **'What happens'**
+  String get plan;
+
+  /// No description provided for @stepNew.
+  ///
+  /// In en, this message translates to:
+  /// **'added'**
+  String get stepNew;
+
+  /// No description provided for @stepSame.
+  ///
+  /// In en, this message translates to:
+  /// **'unchanged'**
+  String get stepSame;
+
+  /// No description provided for @stepReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'replaced'**
+  String get stepReplace;
+
+  /// No description provided for @stepMerge.
+  ///
+  /// In en, this message translates to:
+  /// **'merged, your changes kept'**
+  String get stepMerge;
+
+  /// No description provided for @stepGone.
+  ///
+  /// In en, this message translates to:
+  /// **'no longer in the template – kept'**
+  String get stepGone;
+
+  /// No description provided for @keptHere.
+  ///
+  /// In en, this message translates to:
+  /// **'kept as here: {items}'**
+  String keptHere(String items);
+
+  /// No description provided for @sources.
+  ///
+  /// In en, this message translates to:
+  /// **'Sources'**
+  String get sources;
+
+  /// No description provided for @sourcesHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Catalogs this device reads templates from. The official one can be switched off.'**
+  String get sourcesHint;
+
+  /// No description provided for @addSource.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a source'**
+  String get addSource;
+
+  /// No description provided for @sourceAddress.
+  ///
+  /// In en, this message translates to:
+  /// **'Address (https://…)'**
+  String get sourceAddress;
+
+  /// No description provided for @official.
+  ///
+  /// In en, this message translates to:
+  /// **'official'**
+  String get official;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

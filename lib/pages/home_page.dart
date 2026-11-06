@@ -8,6 +8,7 @@ import '../l10n/app_localizations.dart';
 import '../src/rust/api/archive.dart';
 import 'document_page.dart';
 import 'join_page.dart';
+import 'kinds_page.dart';
 import 'sync_page.dart';
 
 /// The archive: its spaces, the documents of the chosen one, search, adding files and the bin.
@@ -43,6 +44,13 @@ class _HomePageState extends State<HomePage> {
     _refresh = Timer.periodic(const Duration(seconds: 3), (_) {
       if (_documents.any((d) => d.reading == 'waiting' || d.reading == 'reading')) _loadDocuments();
     });
+  }
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    // Names of kinds and fields in the app's language.
+    _archive.setLanguage(language: Localizations.localeOf(context).languageCode);
   }
 
   @override
@@ -91,6 +99,18 @@ class _HomePageState extends State<HomePage> {
     if (space == null) return;
     _space = space;
     if (mounted) setState(() => _message = AppLocalizations.of(context).joining);
+    await _load();
+  }
+
+  Future<void> _openKinds() async {
+    final space = _space;
+    if (space == null) return;
+    await Navigator.push(
+      context,
+      MaterialPageRoute<void>(
+        builder: (_) => KindsPage(archive: _archive, space: space),
+      ),
+    );
     await _load();
   }
 
@@ -232,6 +252,8 @@ class _HomePageState extends State<HomePage> {
       appBar: AppBar(
         title: Text(title),
         actions: [
+          if (_space != null)
+            IconButton(icon: const Icon(Icons.category_outlined), tooltip: l.kinds, onPressed: _openKinds),
           if (_space != null)
             IconButton(
               icon: Icon(

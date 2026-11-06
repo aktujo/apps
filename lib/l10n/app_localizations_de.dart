@@ -211,4 +211,170 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get code => 'Wiederherstellungscode';
+
+  @override
+  String get kind => 'Art';
+
+  @override
+  String get noKind => 'Keine Art';
+
+  @override
+  String suggestedKind(String kind) {
+    return 'Vorgeschlagen: $kind';
+  }
+
+  @override
+  String get confirm => 'Bestätigen';
+
+  @override
+  String get confirmSuggestions => 'Vorschläge bestätigen';
+
+  @override
+  String get noValue => '–';
+
+  @override
+  String get hintDate => 'JJJJ-MM-TT';
+
+  @override
+  String get hintMoney => '12,50 EUR';
+
+  @override
+  String get hintNumber => '12,5';
+
+  @override
+  String get hintFlag => 'ja oder nein';
+
+  @override
+  String get kinds => 'Arten';
+
+  @override
+  String get kindsHint =>
+      'Die Arten von Dokumenten dieses Space – ihre Felder und die Wörter, die für sie sprechen. aktujo bringt keine mit: Leg eigene an oder übernimm eine Vorlage aus einem Katalog.';
+
+  @override
+  String get noKinds => 'Noch keine Arten. Leg eine an oder übernimm eine Vorlage aus einem Katalog.';
+
+  @override
+  String get addKind => 'Art anlegen';
+
+  @override
+  String get kindName => 'Name der Art';
+
+  @override
+  String get rename => 'Umbenennen';
+
+  @override
+  String get remove => 'Entfernen';
+
+  @override
+  String removeKindConfirm(String name) {
+    return 'Die Art $name entfernen? Dokumente behalten sie als ihre Art.';
+  }
+
+  @override
+  String get addField => 'Feld hinzufügen';
+
+  @override
+  String get fieldName => 'Name des Felds';
+
+  @override
+  String get fieldType => 'Typ';
+
+  @override
+  String get typeText => 'Text';
+
+  @override
+  String get typeDate => 'Datum';
+
+  @override
+  String get typeMoney => 'Betrag';
+
+  @override
+  String get typeNumber => 'Zahl';
+
+  @override
+  String get typeFlag => 'ja / nein';
+
+  @override
+  String get words => 'Wörter';
+
+  @override
+  String get wordsHint => 'Wörter in einem Dokument, die für diese Art sprechen; ab 6 wird eine Art vorgeschlagen.';
+
+  @override
+  String get addWord => 'Wort hinzufügen';
+
+  @override
+  String get word => 'Wort';
+
+  @override
+  String get weight => 'Gewicht';
+
+  @override
+  String get importKinds => 'Datei mit Arten importieren';
+
+  @override
+  String imported(int n) {
+    return '$n Arten geändert';
+  }
+
+  @override
+  String get catalog => 'Katalog';
+
+  @override
+  String get catalogHint =>
+      'Vorlagen von Arten aus den Katalogen, die du nutzt – jetzt gelesen. Wer eine übernimmt, bekommt ihre Arten; geänderte Arten behalten deine Änderungen.';
+
+  @override
+  String get standingNew => 'neu';
+
+  @override
+  String get standingTaken => 'übernommen';
+
+  @override
+  String get standingUpdate => 'Update verfügbar';
+
+  @override
+  String get take => 'Übernehmen';
+
+  @override
+  String get update => 'Aktualisieren';
+
+  @override
+  String get plan => 'Was passiert';
+
+  @override
+  String get stepNew => 'hinzugefügt';
+
+  @override
+  String get stepSame => 'unverändert';
+
+  @override
+  String get stepReplace => 'ersetzt';
+
+  @override
+  String get stepMerge => 'zusammengeführt, deine Änderungen bleiben';
+
+  @override
+  String get stepGone => 'nicht mehr in der Vorlage – bleibt';
+
+  @override
+  String keptHere(String items) {
+    return 'wie hier behalten: $items';
+  }
+
+  @override
+  String get sources => 'Quellen';
+
+  @override
+  String get sourcesHint => 'Kataloge, aus denen dieses Gerät Vorlagen liest. Der offizielle lässt sich ausschalten.';
+
+  @override
+  String get addSource => 'Quelle hinzufügen';
+
+  @override
+  String get sourceAddress => 'Adresse (https://…)';
+
+  @override
+  String get official => 'offiziell';
 }

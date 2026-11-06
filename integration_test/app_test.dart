@@ -9,6 +9,7 @@ import 'dart:io';
 import 'package:aktujo/app/opening.dart';
 import 'package:aktujo/main.dart';
 import 'package:aktujo/pages/home_page.dart';
+import 'package:aktujo/pages/kinds_page.dart';
 import 'package:aktujo/src/rust/frb_generated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -162,6 +163,73 @@ void main() {
     await tester.tap(find.text('Sync now'));
     await waitFor(tester, find.textContaining('received'), timeout: const Duration(seconds: 30));
     expect(find.textContaining('received'), findsOneWidget);
+
+    await keptKeys.delete(key: keyName);
+    await scratch.delete(recursive: true);
+  });
+
+  testWidgets('kinds are made and imported, and a document gets a kind and values', (tester) async {
+    final scratch = await Directory.systemTemp.createTemp('aktujo-app-kinds');
+    const keyName = 'aktujo.data-folder.test-kinds';
+    await keptKeys.delete(key: keyName);
+    final archive = await openArchive(folder: '${scratch.path}/data', keyName: keyName);
+    final space = await archive.foundSpace(name: 'Home');
+    final file = File('${scratch.path}/Lease.pdf')..writeAsBytesSync('%PDF-1.4 lease'.codeUnits);
+    await archive.addFiles(space: space, paths: [file.path]);
+    final kindsFile = File('${scratch.path}/kinds.json')
+      ..writeAsStringSync('[{"id": "receipt", "name": "Receipt", "fields": []}]');
+
+    await tester.pumpWidget(
+      AktujoApp(
+        locale: const Locale('en'),
+        home: KindsPage(archive: archive, space: space, pickFile: () async => kindsFile.path),
+      ),
+    );
+    await waitFor(tester, find.text('No kinds yet. Add one, or take a template from a catalog.'));
+    await tester.tap(find.text('Add a kind').last);
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField), 'Contract');
+    await tester.tap(find.widgetWithText(FilledButton, 'Add a kind'));
+    await waitFor(tester, find.text('Contract'));
+    await tester.tap(find.text('Contract'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(TextButton, 'Add a field'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.widgetWithText(TextField, 'Name of the field'), 'Deposit');
+    await tester.tap(find.byType(DropdownButtonFormField<String>));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('amount').last);
+    await tester.pumpAndSettle();
+    await tester.tap(find.widgetWithText(FilledButton, 'Add a field'));
+    await waitFor(tester, find.text('deposit · amount'));
+    expect(find.text('deposit · amount'), findsOneWidget);
+    await tester.tap(find.byTooltip('Import a file of kinds'));
+    await waitFor(tester, find.text('1 kinds changed'));
+    expect(find.text('Receipt'), findsOneWidget);
+
+    // The document: its kind chosen, a value typed.
+    final document = (await archive.documents(space: space, words: '', bin: false)).single.id;
+    await tester.pumpWidget(
+      AktujoApp(
+        locale: const Locale('en'),
+        home: HomePage(archive: archive),
+      ),
+    );
+    await waitFor(tester, find.text('Lease'));
+    await tester.tap(find.text('Lease'));
+    await waitFor(tester, find.text('No kind'));
+    await tester.tap(find.text('No kind').first);
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Contract').last);
+    await waitFor(tester, find.text('Deposit'));
+    await tester.tap(find.text('Deposit'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, '1200,50 eur');
+    await tester.tap(find.widgetWithText(FilledButton, 'Save'));
+    await waitFor(tester, find.text('1200.50 EUR'));
+    expect(find.text('1200.50 EUR'), findsOneWidget);
+    final detail = await archive.document(space: space, document: document);
+    expect(detail.kindId, 'contract');
 
     await keptKeys.delete(key: keyName);
     await scratch.delete(recursive: true);
