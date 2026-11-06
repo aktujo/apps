@@ -531,14 +531,18 @@ mod tests {
         assert_eq!(phone.join(invitation, Some(" Phone ".into())).unwrap(), space);
         assert!(phone.spaces().unwrap()[0].waiting);
 
-        // The laptop adds the phone at its next synchronisation; then the documents arrive on the phone.
-        let added = laptop.sync_now(space.clone()).unwrap();
-        assert_eq!(added.added, ["Phone"]);
-        let arrived = phone.sync_now(space.clone()).unwrap();
-        assert!(!arrived.waiting);
-        let titles: Vec<String> =
-            phone.documents(space.clone(), String::new(), false).unwrap().into_iter().map(|d| d.title).collect();
-        assert_eq!(titles, ["Lease"]);
+        // The laptop adds the phone at a synchronisation – its own in the background, or this one; then the documents
+        // arrive on the phone.
+        let titles = |archive: &Archive| -> Vec<String> {
+            archive.documents(space.clone(), String::new(), false).unwrap().into_iter().map(|d| d.title).collect()
+        };
+        let deadline = std::time::Instant::now() + Duration::from_secs(20);
+        while titles(&phone).is_empty() && std::time::Instant::now() < deadline {
+            laptop.sync_now(space.clone()).unwrap();
+            phone.sync_now(space.clone()).unwrap();
+        }
+        assert_eq!(titles(&phone), ["Lease"]);
+        assert!(!phone.spaces().unwrap()[0].waiting);
         assert_eq!(phone.spaces().unwrap()[0].rights.as_deref(), Some("write"));
 
         let members = laptop.members(space.clone()).unwrap();
