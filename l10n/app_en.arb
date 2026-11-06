@@ -1,0 +1,152 @@
+{
+  "@@locale": "en",
+  "appTitle": "aktujo",
+  "firstSpace": "Name your first space – a private archive, for example. More can follow.",
+  "documents": "Documents",
+  "bin": "Bin",
+  "noDocuments": "No documents yet. Add PDFs or images.",
+  "nothingFound": "Nothing found.",
+  "waiting": "waits to be read",
+  "reading": "is being read",
+  "failed": "could not be read",
+  "save": "Save",
+  "cancel": "Cancel",
+  "text": "Text",
+  "noText": "No text read yet.",
+  "toBin": "Into the bin",
+  "fromBin": "Out of the bin",
+  "error": "Something went wrong: {message}",
+  "@error": {
+    "placeholders": {
+      "message": {
+        "type": "String"
+      }
+    }
+  },
+  "syncHint": "Keep this space in step with your other devices – and share it with other people – through a relay you run yourself (aktujo relay). Everything is end-to-end encrypted: the relay sees nothing.",
+  "deviceNameHint": "The other members see it – \"Laptop\" or \"Anna's phone\", for example.",
+  "recoveryCodeHint": "Write it down and keep it on paper. It is shown only now. Without it and without a device of this space, the space is lost.",
+  "done": "Done",
+  "syncedAt": "Synced {time}",
+  "@syncedAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "notSynced": "Not synced since the app started.",
+  "waitingToBeAdded": "Waiting to be added by a device that manages this space.",
+  "invite": "Invite",
+  "inviteHint": "An invitation for another device or person, good for a day. Send it on a safe way.",
+  "mayRead": "may read",
+  "mayWrite": "may read and write",
+  "mayManage": "may manage",
+  "removeMemberConfirm": "Remove {name}? It gets nothing written after.",
+  "@removeMemberConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "joining": "Asked to join – the space arrives once a device that manages it has added this one.",
+  "recover": "Bring a space back",
+  "recoverHint": "With its recovery code, when no device of it is left.",
+  "spaceId": "Identity of the space",
+  "suggestedKind": "Suggested: {kind}",
+  "@suggestedKind": {
+    "placeholders": {
+      "kind": {
+        "type": "String"
+      }
+    }
+  },
+  "confirmSuggestions": "Confirm suggestions",
+  "noValue": "–",
+  "hintDate": "YYYY-MM-DD",
+  "hintMoney": "12.50 EUR",
+  "hintNumber": "12.5",
+  "hintFlag": "yes or no",
+  "kindsIntro": "The kinds of documents of this space – their fields, and the words that speak for them. aktujo has none built in: make your own, or take a template from a catalog.",
+  "noKinds": "No kinds yet. Add one, or take a template from a catalog.",
+  "addKind": "Add a kind",
+  "kindName": "Name of the kind",
+  "rename": "Rename",
+  "remove": "Remove",
+  "removeKindConfirm": "Remove the kind {name}? Documents keep it as their kind.",
+  "@removeKindConfirm": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "addField": "Add a field",
+  "fieldName": "Name of the field",
+  "fieldTypeText": "text",
+  "fieldTypeDate": "date",
+  "fieldTypeMoney": "amount",
+  "fieldTypeNumber": "number",
+  "fieldTypeFlag": "yes / no",
+  "words": "Words",
+  "wordsHint": "Words in a document that speak for this kind; a kind is suggested from 6.",
+  "addWord": "Add a word",
+  "word": "Word",
+  "weight": "Weight",
+  "importKinds": "Import a file of kinds",
+  "imported": "{n} kinds changed",
+  "@imported": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "catalog": "Catalog",
+  "catalogIntro": "Templates of kinds from the catalogs you use – read now. Taking one over adds its kinds; kinds you changed keep your changes.",
+  "standingTaken": "taken",
+  "standingUpdate": "update available",
+  "update": "Update",
+  "plan": "What happens",
+  "stepNew": "added",
+  "stepSame": "unchanged",
+  "stepReplace": "replaced",
+  "stepMerge": "merged, your changes kept",
+  "stepGone": "no longer in the template – kept",
+  "keptHere": "kept as here: {items}",
+  "@keptHere": {
+    "placeholders": {
+      "items": {
+        "type": "String"
+      }
+    }
+  },
+  "sources": "Sources",
+  "sourcesIntro": "Catalogs this device reads templates from. The official one can be switched off.",
+  "addSource": "Add a source",
+  "sourceAddress": "Address (https://…)",
+  "scan": "Scan",
+  "scanHint": "Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.",
+  "takePhoto": "Take a photo",
+  "chooseImages": "Choose images",
+  "noPages": "No pages yet.",
+  "page": "Page {n}",
+  "@page": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "turn": "Turn",
+  "moveUp": "Up",
+  "moveDown": "Down",
+  "straighten": "Straighten",
+  "colour": "Colour",
+  "colourKeep": "as it is",
+  "colourGrey": "grey",
+  "colourBlackWhite": "black and white",
+  "trim": "Trim the edges",
+  "saveScan": "Save as a document"
+}

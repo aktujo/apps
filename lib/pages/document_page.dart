@@ -78,7 +78,7 @@ class _DocumentPageState extends State<DocumentPage> {
     final text = await showDialog<String>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text(l.title),
+        title: Text(l.docTitle),
         content: TextField(controller: controller, autofocus: true, onSubmitted: (v) => Navigator.pop(context, v)),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
@@ -102,7 +102,7 @@ class _DocumentPageState extends State<DocumentPage> {
       appBar: AppBar(
         title: Text(item.title),
         actions: [
-          IconButton(icon: const Icon(Icons.edit), tooltip: l.title, onPressed: () => _rename(item.title)),
+          IconButton(icon: const Icon(Icons.edit), tooltip: l.docTitle, onPressed: () => _rename(item.title)),
           IconButton(
             icon: Icon(item.trashed ? Icons.restore_from_trash : Icons.delete_outline),
             tooltip: item.trashed ? l.fromBin : l.toBin,
@@ -118,7 +118,7 @@ class _DocumentPageState extends State<DocumentPage> {
           Text([item.date, ?item.kind].join(' · '), style: muted),
           if (_message != null) Text(_message!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           const SizedBox(height: 16),
-          Text(l.labels, style: heading),
+          Text(l.docLabels, style: heading),
           Wrap(
             spacing: 8,
             children: [
@@ -133,7 +133,7 @@ class _DocumentPageState extends State<DocumentPage> {
                 width: 200,
                 child: TextField(
                   controller: _label,
-                  decoration: InputDecoration(hintText: l.addLabel),
+                  decoration: InputDecoration(hintText: l.docAddLabel),
                   onSubmitted: (label) {
                     _label.clear();
                     if (label.trim().isEmpty) return;
@@ -144,16 +144,16 @@ class _DocumentPageState extends State<DocumentPage> {
             ],
           ),
           const SizedBox(height: 16),
-          Text(l.kind, style: heading),
+          Text(l.docKind, style: heading),
           Row(
             children: [
               Expanded(
                 child: DropdownButton<String?>(
                   isExpanded: true,
                   value: _kinds.any((k) => k.id == detail.kindId) ? detail.kindId : null,
-                  hint: Text(l.noKind),
+                  hint: Text(l.docNoKind),
                   items: [
-                    DropdownMenuItem<String?>(value: null, child: Text(l.noKind)),
+                    DropdownMenuItem<String?>(value: null, child: Text(l.docNoKind)),
                     for (final kind in _kinds) DropdownMenuItem<String?>(value: kind.id, child: Text(kind.name)),
                   ],
                   onChanged: (kind) =>
@@ -174,7 +174,7 @@ class _DocumentPageState extends State<DocumentPage> {
             ),
           if (detail.fields.isNotEmpty) ...[
             const SizedBox(height: 16),
-            Text(l.fields, style: heading),
+            Text(l.docFields, style: heading),
             for (final field in detail.fields)
               ListTile(
                 dense: true,
@@ -182,7 +182,7 @@ class _DocumentPageState extends State<DocumentPage> {
                 subtitle: Text(
                   [
                     field.value.isEmpty ? l.noValue : field.value,
-                    if (field.suggested != null) '${field.suggested} (${l.suggested})',
+                    if (field.suggested != null) '${field.suggested} (${l.docSuggested})',
                   ].join(' · '),
                 ),
                 trailing: const Icon(Icons.edit, size: 18),
@@ -190,7 +190,7 @@ class _DocumentPageState extends State<DocumentPage> {
               ),
           ],
           const SizedBox(height: 16),
-          Text(l.versions, style: heading),
+          Text(l.docVersions, style: heading),
           for (final version in detail.versions)
             ListTile(
               dense: true,

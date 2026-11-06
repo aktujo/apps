@@ -105,7 +105,7 @@ class _CatalogPageState extends State<CatalogPage> {
           TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.cancel)),
           FilledButton(
             onPressed: () => Navigator.pop(context, true),
-            child: Text(template.standing == 'update' ? l.update : l.take),
+            child: Text(template.standing == 'update' ? l.update : l.catalogTake),
           ),
         ],
       ),
@@ -132,7 +132,7 @@ class _CatalogPageState extends State<CatalogPage> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          Text(l.catalogHint, style: muted),
+          Text(l.catalogIntro, style: muted),
           if (_error != null) Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           if (_loading)
             const Padding(
@@ -154,7 +154,7 @@ class _CatalogPageState extends State<CatalogPage> {
                       '${template.sourceName} · ${switch (template.standing) {
                         'taken' => l.standingTaken,
                         'update' => l.standingUpdate,
-                        _ => l.standingNew,
+                        _ => l.catalogStepNew,
                       }}',
                     ].join('\n'),
                   ),
@@ -163,19 +163,19 @@ class _CatalogPageState extends State<CatalogPage> {
                       ? const Icon(Icons.check)
                       : FilledButton(
                           onPressed: () => _take(template),
-                          child: Text(template.standing == 'update' ? l.update : l.take),
+                          child: Text(template.standing == 'update' ? l.update : l.catalogTake),
                         ),
                 ),
               ),
           ],
           const SizedBox(height: 32),
           Text(l.sources, style: heading),
-          Text(l.sourcesHint, style: muted),
+          Text(l.sourcesIntro, style: muted),
           for (final source in _sources)
             SwitchListTile(
               value: source.active,
               title: Text(source.url),
-              subtitle: source.official ? Text(l.official) : null,
+              subtitle: source.official ? Text(l.sourcesOfficial) : null,
               secondary: source.official
                   ? null
                   : IconButton(

@@ -12,7 +12,7 @@ Flutter (stable), Rust from `rust/rust-toolchain.toml` (put `~/.cargo/bin` first
 ```sh
 flutter pub get
 flutter_rust_bridge_codegen generate && (cd rust && cargo fmt)    # after changing rust/src/api/
-flutter gen-l10n                                                  # after changing lib/l10n/*.arb
+scripts/l10n.py && flutter gen-l10n                              # after changing l10n/*.arb or aktujo-locales
 (cd rust && cargo fmt --check && cargo clippy --locked --all-targets -- -D warnings && cargo test --locked && cargo deny check)
 dart format --output=none --set-exit-if-changed lib integration_test && flutter analyze
 flutter test integration_test -d macos                            # the app with its real Rust side
@@ -20,6 +20,7 @@ scripts/check-age.py                                              # after changi
 ```
 
 The archive is aktujo's SDK (`aktujo-sdk` on crates.io); `rust/src/api/` only translates it for Dart. A change the
-archive needs belongs in [aktujo/aktujo](https://github.com/aktujo/aktujo). Strings go into `lib/l10n/app_en.arb` and
-`app_de.arb`. Colours, fonts and the icons come from [aktujo/brand](https://github.com/aktujo/brand) only – copied,
+archive needs belongs in [aktujo/aktujo](https://github.com/aktujo/aktujo). Strings of the app's own go into `l10n/app_en.arb`
+and `app_de.arb`; the texts it shares with aktujo's web app and terminal interface come from `aktujo-locales` and are
+changed in aktujo/aktujo. Colours, fonts and the icons come from [aktujo/brand](https://github.com/aktujo/brand) only – copied,
 never drawn or edited here.

@@ -75,6 +75,7 @@ jobs:
           cargo install --locked "flutter_rust_bridge_codegen@$FRB_VERSION" "cargo-expand@$CARGO_EXPAND_VERSION"
           flutter_rust_bridge_codegen generate
           (cd rust && cargo fmt)
+          python3 scripts/l10n.py
           flutter gen-l10n
           git diff --exit-code lib/src/rust rust/src/frb_generated.rs lib/l10n
       - run: dart format --output=none --set-exit-if-changed lib integration_test

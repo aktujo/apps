@@ -240,7 +240,7 @@ class _ScanPageState extends State<ScanPage> {
           const SizedBox(height: 16),
           TextField(
             controller: _title,
-            decoration: InputDecoration(labelText: l.title, hintText: l.scan),
+            decoration: InputDecoration(labelText: l.docTitle, hintText: l.scan),
           ),
           const SizedBox(height: 12),
           FilledButton(onPressed: _busy || _pages.isEmpty ? null : _save, child: Text(l.saveScan)),

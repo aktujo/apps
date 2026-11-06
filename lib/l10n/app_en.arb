@@ -1,41 +1,426 @@
 {
   "@@locale": "en",
-  "appTitle": "aktujo",
+  "language": "English",
   "tagline": "Your documents, kept safe – end to end.",
   "spaces": "Spaces",
-  "newSpace": "New space",
+  "spaceNew": "New space",
   "spaceName": "Name of the space",
-  "found": "Found",
+  "spaceFound": "Found",
+  "spaceRename": "Rename",
+  "spaceFirst": "Name your first space – a private archive, for example. More can follow.",
+  "search": "Search",
+  "searchPlaceholder": "Search words, \"a phrase\"",
+  "filterKind": "Kind",
+  "filterAnyKind": "Any kind",
+  "filterLabels": "Labels",
+  "filterFrom": "From",
+  "filterTo": "To",
+  "filterReset": "Reset filters",
+  "binOutside": "Documents",
+  "binInside": "Bin",
+  "binBoth": "All",
+  "docAdd": "Add files",
+  "docDrop": "Drop files here to add them",
+  "docAdded": "{n} added",
+  "@docAdded": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "docKnown": "{n} were there already",
+  "@docKnown": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "docNone": "No documents here.",
+  "docFound": "{n} documents",
+  "@docFound": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "docBack": "Back",
+  "docTitle": "Title",
+  "docDate": "Date",
+  "docKind": "Kind",
+  "docNoKind": "No kind",
+  "docSuggested": "suggested",
+  "docConfirm": "Confirm",
+  "docFields": "Fields",
+  "docLabels": "Labels",
+  "docAddLabel": "Add a label",
+  "docRemoveLabel": "Remove the label {label}",
+  "@docRemoveLabel": {
+    "placeholders": {
+      "label": {}
+    }
+  },
+  "docVersions": "Versions",
+  "docVersion": "Version {n}",
+  "@docVersion": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "docAddVersion": "Add a version",
+  "docOpen": "Open",
+  "docDownload": "Download",
+  "docText": "Text read",
+  "docTrash": "Put in the bin",
+  "docRestore": "Take out of the bin",
+  "docInBin": "In the bin",
+  "docTitleSuggestion": "Suggested title: {title}",
+  "@docTitleSuggestion": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "docTake": "Take it",
+  "docEdit": "Edit",
+  "docClear": "Empty",
+  "docSave": "Save",
+  "docCancel": "Cancel",
+  "readingWaiting": "waiting to be read",
+  "readingReading": "being read",
+  "readingDone": "read",
+  "readingFailed": "reading failed",
+  "readingUnread": "{unread} of {pages} pages without text",
+  "@readingUnread": {
+    "placeholders": {
+      "unread": {},
+      "pages": {}
+    }
+  },
+  "readingOcr": "with OCR",
+  "readingNoOcr": "This build reads text layers only (aktujo-minimal).",
+  "readingProblem": "Reading in the background stopped: {problem}",
+  "@readingProblem": {
+    "placeholders": {
+      "problem": {}
+    }
+  },
+  "valueYes": "Yes",
+  "valueNo": "No",
+  "docReading": "Reading",
+  "languageChoose": "Language",
+  "settings": "Settings",
+  "settingsAbout": "This program",
+  "settingsVersion": "Version",
+  "settingsDevice": "Device",
+  "settingsOcr": "Reads pages without text (OCR)",
+  "theme": "Colour scheme",
+  "themeAuto": "Like the system",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "syncTitle": "Sync and sharing",
+  "syncNotYet": "This space is only on this device.",
+  "syncRelay": "Address of the relay",
+  "syncRelayHint": "A relay you run yourself with aktujo relay – on a small server or in your home network. It only ever sees encrypted data.",
+  "syncStart": "Start syncing",
+  "syncCode": "Recovery code",
+  "syncCodeHint": "Write it down and keep it safe. It is shown only now: without it and without a device of this space, the space is lost.",
+  "syncCodeDone": "I have written it down",
+  "syncVia": "Synced through {relay}",
+  "@syncVia": {
+    "placeholders": {
+      "relay": {}
+    }
+  },
+  "syncLast": "Last synced {time}",
+  "@syncLast": {
+    "placeholders": {
+      "time": {}
+    }
+  },
+  "syncNever": "Not synced since the program started",
+  "syncNow": "Sync now",
+  "syncReport": "{received} received, {sent} sent",
+  "@syncReport": {
+    "placeholders": {
+      "received": {},
+      "sent": {}
+    }
+  },
+  "syncAdded": "Added: {names}",
+  "@syncAdded": {
+    "placeholders": {
+      "names": {}
+    }
+  },
+  "syncWaiting": "This device waits to be added by a device that may manage the space – at that device's next sync.",
+  "syncProblem": "Sync failed: {problem}",
+  "@syncProblem": {
+    "placeholders": {
+      "problem": {}
+    }
+  },
+  "syncInvite": "Invite a device",
+  "syncInviteHint": "Your own device or someone else's. The invitation is good for a day; the device is added at the next sync of this one.",
+  "syncInvitation": "Invitation – pass it on",
+  "syncCopy": "Copy",
+  "syncCopied": "Copied",
+  "syncMembers": "Members",
+  "syncThisDevice": "this device",
+  "syncRemove": "Remove",
+  "syncRemoveConfirm": "Remove {name}? It gets nothing written after.",
+  "@syncRemoveConfirm": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "syncReadOnly": "This device may only read in this space.",
+  "rightsRead": "May read",
+  "rightsWrite": "May read and write",
+  "rightsManage": "May manage",
+  "settingsDeviceName": "Name of this device",
+  "settingsDeviceNameHint": "The other members of a space see it – \"Laptop\" or \"Anna's phone\", for example.",
+  "settingsJoin": "Join a space",
+  "settingsJoinHint": "Paste an invitation you were given.",
+  "settingsRecover": "Bring a space back",
+  "settingsRecoverHint": "With its recovery code, when no device of it is left.",
+  "settingsSpace": "Identity of the space",
+  "syncJoin": "Join",
+  "syncRecover": "Bring back",
+  "syncInvitationField": "Invitation",
+  "kindsTitle": "Kinds",
+  "kindsHint": "Kinds of documents are yours to define – letters, sheet music, research papers, the books of a collection, anything. Each space has its own; they are shared with its members.",
+  "kindsNone": "No kinds yet. Add one, or import a template.",
+  "kindsNewName": "Name of a new kind",
+  "kindsAdd": "Add kind",
+  "kindsImport": "Import template …",
+  "kindsExport": "Export kinds",
+  "kindsImportHint": "A template is a JSON file of kinds, e.g. from github.com/aktujo/catalog or exported from another space. Kinds with the same identity are replaced.",
+  "kindsImported": "{n} kinds taken over",
+  "@kindsImported": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "kindsSaved": "Saved",
+  "kindsFieldCount": "{n} fields",
+  "@kindsFieldCount": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "kindsName": "Name",
+  "kindsFieldName": "Field",
+  "kindsFieldType": "Type",
+  "kindsLabels": "Found after",
+  "kindsLabelsPlaceholder": "labels, comma-separated",
+  "kindsInTitle": "In the title",
+  "kindsOrder": "Order",
+  "kindsUp": "Move up",
+  "kindsDown": "Move down",
+  "kindsRemoveField": "Remove field {name}",
+  "@kindsRemoveField": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "kindsNewField": "Name of a new field",
+  "kindsWords": "Words that speak for this kind",
+  "kindsWordsHint": "One per line, optionally with a weight: “isbn = 6”. Without one a word weighs 2; from a sum of 6 the kind is suggested.",
+  "kindsAsJson": "Edit as JSON",
+  "kindsRemove": "Remove kind",
+  "kindsRemoveConfirm": "Remove the kind “{name}”? Its documents keep it.",
+  "@kindsRemoveConfirm": {
+    "placeholders": {
+      "name": {}
+    }
+  },
+  "typeText": "Text",
+  "typeDate": "Date",
+  "typeMoney": "Amount",
+  "typeNumber": "Number",
+  "typeFlag": "Yes/no",
+  "catalogBrowse": "From a catalog …",
+  "catalogTitle": "Templates from catalogs",
+  "catalogHint": "Read now from the sources that are on (settings). Look at what a template would do before you take it over.",
+  "catalogReload": "Read again",
+  "catalogReading": "Reading the sources …",
+  "catalogUnreadable": "{source} could not be read: {problem}",
+  "@catalogUnreadable": {
+    "placeholders": {
+      "source": {},
+      "problem": {}
+    }
+  },
+  "catalogEmpty": "No templates – are the sources switched on?",
+  "catalogUpdates": "{n} templates have an update.",
+  "@catalogUpdates": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "catalogTag": "Tag",
+  "catalogAnyTag": "Any",
+  "catalogOpen": "Look at it",
+  "catalogShowUpdate": "Look at the update",
+  "catalogOfficial": "official",
+  "catalogNotReviewed": "From {source} – not reviewed by the aktujo team.",
+  "@catalogNotReviewed": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "catalogStandingTaken": "taken over",
+  "catalogStandingUpdate": "update",
+  "catalogStepNew": "new",
+  "catalogStepSame": "already the same",
+  "catalogStepReplace": "replaces the kind here",
+  "catalogStepMerge": "changed here – merged",
+  "catalogStepGone": "no longer in the template",
+  "catalogAdd": "Add",
+  "catalogSkip": "Leave out",
+  "catalogReplace": "Replace",
+  "catalogMerge": "Merge, keeping the changes here",
+  "catalogTheirs": "The template's as it is",
+  "catalogKeepMine": "Keep it as it is here",
+  "catalogRemove": "Remove",
+  "catalogConflicts": "Changed here and in the template – the version here stays:",
+  "catalogItem": "What",
+  "catalogMine": "Here",
+  "catalogTheirsColumn": "Template",
+  "catalogAbsent": "(removed)",
+  "catalogTake": "Take over",
+  "sourcesTitle": "Sources of templates",
+  "sourcesHint": "Catalogs aktujo reads templates from – only when you open one. The official catalog can be switched off.",
+  "sourcesOfficial": "official",
+  "sourcesAdd": "Add source",
+  "sourcesRemove": "Remove",
+  "sourcesRemoveConfirm": "Remove the source {source}?",
+  "@sourcesRemoveConfirm": {
+    "placeholders": {
+      "source": {}
+    }
+  },
+  "watchTitle": "Watched folders",
+  "watchHint": "New files in a folder of this device – from a scanner, say – are taken into a space on their own: PDF, PNG, JPEG and TIFF, once they are written completely. The folder is looked at every few seconds while aktujo runs; its subfolders only if you ask for them.",
+  "watchFolder": "Folder",
+  "watchFolderPlaceholder": "/Users/…/Scans – the full path",
+  "watchSpace": "Space",
+  "watchMoveOption": "Move taken files into the folder “added” inside it",
+  "watchAdd": "Watch folder",
+  "watchLeave": "files stay where they are",
+  "watchMove": "files are moved into “added”",
+  "watchToMove": "Move files",
+  "watchToLeave": "Leave files",
+  "watchTaken": "{n} taken, looked at {time}",
+  "@watchTaken": {
+    "placeholders": {
+      "n": {},
+      "time": {}
+    }
+  },
+  "watchRemove": "Stop watching",
+  "watchRemoveConfirm": "Stop watching {folder}? Its files and the documents taken from it stay.",
+  "@watchRemoveConfirm": {
+    "placeholders": {
+      "folder": {}
+    }
+  },
+  "improveOpen": "Improve …",
+  "improveTitle": "Improve",
+  "improveHint": "Turn, straighten, crop, grey or black and white, choose and order pages – saved as a new version; the earlier one stays.",
+  "improvePages": "Pages",
+  "improvePage": "Page {n}",
+  "@improvePage": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "improveShow": "Show page {n}",
+  "@improveShow": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "improveTurn": "Turn by a quarter",
+  "improveLeaveOut": "Leave this page out",
+  "improveAllPages": "All pages again",
+  "improveSteps": "Improve",
+  "improveDeskew": "Straighten (pages scanned at an angle)",
+  "improveColour": "Colours",
+  "improveColourKeep": "As they are",
+  "improveColourGrey": "Grey",
+  "improveColourBlackWhite": "Black and white",
+  "improveCrop": "Cut away",
+  "improveCropLeft": "Left",
+  "improveCropTop": "Top",
+  "improveCropRight": "Right",
+  "improveCropBottom": "Bottom",
+  "improveSave": "Save as a new version",
+  "improvePreview": "Preview",
+  "docPages": "Pages",
+  "docHidePages": "Hide pages",
+  "combineChoose": "Combine …",
+  "combineDo": "Combine {n} into one",
+  "@combineDo": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "combineHint": "Choose the documents whose pages make one document, in the order of the list. The first gets them as its newest version; the others go into the bin.",
+  "combinePick": "Choose {title}",
+  "@combinePick": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "combineDone": "Combined into “{title}”",
+  "@combineDone": {
+    "placeholders": {
+      "title": {}
+    }
+  },
+  "spaceExport": "Export",
+  "spaceExportHint": "Download this space as a ZIP: every document with its versions, what was read, the state as JSON, the events – readable without aktujo, not encrypted.",
+  "importTitle": "Read an export back in",
+  "importHint": "A ZIP that aktujo exported becomes a new space: its kinds, documents with their versions, titles, confirmed fields, labels and the bin. Its history starts today; the text is read again.",
+  "importFile": "The exported ZIP",
+  "importName": "Name of the new space (optional)",
+  "importStart": "Read in",
+  "importDone": "Read in: {documents} documents, {kinds} kinds.",
+  "@importDone": {
+    "placeholders": {
+      "documents": {},
+      "kinds": {}
+    }
+  },
+  "importMissing": "{n} versions were not in the export.",
+  "@importMissing": {
+    "placeholders": {
+      "n": {}
+    }
+  },
+  "importSkipped": "Not taken over: {what}",
+  "@importSkipped": {
+    "placeholders": {
+      "what": {}
+    }
+  },
+  "watchDeepOption": "Look into its subfolders too",
+  "watchDeep": "with subfolders",
+  "watchFlat": "without subfolders",
+  "watchToDeep": "With subfolders",
+  "watchToFlat": "Without subfolders",
+  "appTitle": "aktujo",
   "firstSpace": "Name your first space – a private archive, for example. More can follow.",
   "documents": "Documents",
   "bin": "Bin",
-  "search": "Search",
-  "addFiles": "Add files",
-  "added": "{n} added",
-  "@added": {
-    "placeholders": {
-      "n": {
-        "type": "int"
-      }
-    }
-  },
   "noDocuments": "No documents yet. Add PDFs or images.",
   "nothingFound": "Nothing found.",
   "waiting": "waits to be read",
   "reading": "is being read",
   "failed": "could not be read",
-  "title": "Title",
   "save": "Save",
   "cancel": "Cancel",
-  "labels": "Labels",
-  "addLabel": "Add a label",
-  "versions": "Versions",
-  "fields": "Fields",
   "text": "Text",
   "noText": "No text read yet.",
   "toBin": "Into the bin",
   "fromBin": "Out of the bin",
-  "suggested": "suggested",
   "error": "Something went wrong: {message}",
   "@error": {
     "placeholders": {
@@ -44,16 +429,10 @@
       }
     }
   },
-  "sync": "Sync and sharing",
   "syncHint": "Keep this space in step with your other devices – and share it with other people – through a relay you run yourself (aktujo relay). Everything is end-to-end encrypted: the relay sees nothing.",
-  "relay": "Address of the relay",
-  "deviceName": "Name of this device",
   "deviceNameHint": "The other members see it – \"Laptop\" or \"Anna's phone\", for example.",
-  "startSync": "Start syncing",
-  "recoveryCode": "Recovery code",
   "recoveryCodeHint": "Write it down and keep it on paper. It is shown only now. Without it and without a device of this space, the space is lost.",
   "done": "Done",
-  "syncNow": "Sync now",
   "syncedAt": "Synced {time}",
   "@syncedAt": {
     "placeholders": {
@@ -63,28 +442,12 @@
     }
   },
   "notSynced": "Not synced since the app started.",
-  "syncResult": "{received} received, {sent} sent",
-  "@syncResult": {
-    "placeholders": {
-      "received": {
-        "type": "int"
-      },
-      "sent": {
-        "type": "int"
-      }
-    }
-  },
   "waitingToBeAdded": "Waiting to be added by a device that manages this space.",
   "invite": "Invite",
   "inviteHint": "An invitation for another device or person, good for a day. Send it on a safe way.",
-  "invitation": "Invitation",
-  "copy": "Copy",
-  "copied": "Copied",
-  "rightsRead": "may read",
-  "rightsWrite": "may read and write",
-  "rightsManage": "may manage",
-  "members": "Members",
-  "removeMember": "Remove",
+  "mayRead": "may read",
+  "mayWrite": "may read and write",
+  "mayManage": "may manage",
   "removeMemberConfirm": "Remove {name}? It gets nothing written after.",
   "@removeMemberConfirm": {
     "placeholders": {
@@ -93,16 +456,10 @@
       }
     }
   },
-  "recoveryMember": "Recovery code",
-  "join": "Join a space",
-  "joinHint": "Paste an invitation you were given.",
   "joining": "Asked to join – the space arrives once a device that manages it has added this one.",
   "recover": "Bring a space back",
   "recoverHint": "With its recovery code, when no device of it is left.",
   "spaceId": "Identity of the space",
-  "code": "Recovery code",
-  "kind": "Kind",
-  "noKind": "No kind",
   "suggestedKind": "Suggested: {kind}",
   "@suggestedKind": {
     "placeholders": {
@@ -111,15 +468,13 @@
       }
     }
   },
-  "confirm": "Confirm",
   "confirmSuggestions": "Confirm suggestions",
   "noValue": "–",
   "hintDate": "YYYY-MM-DD",
   "hintMoney": "12.50 EUR",
   "hintNumber": "12.5",
   "hintFlag": "yes or no",
-  "kinds": "Kinds",
-  "kindsHint": "The kinds of documents of this space – their fields, and the words that speak for them. aktujo has none built in: make your own, or take a template from a catalog.",
+  "kindsIntro": "The kinds of documents of this space – their fields, and the words that speak for them. aktujo has none built in: make your own, or take a template from a catalog.",
   "noKinds": "No kinds yet. Add one, or take a template from a catalog.",
   "addKind": "Add a kind",
   "kindName": "Name of the kind",
@@ -135,12 +490,11 @@
   },
   "addField": "Add a field",
   "fieldName": "Name of the field",
-  "fieldType": "Type",
-  "typeText": "text",
-  "typeDate": "date",
-  "typeMoney": "amount",
-  "typeNumber": "number",
-  "typeFlag": "yes / no",
+  "fieldTypeText": "text",
+  "fieldTypeDate": "date",
+  "fieldTypeMoney": "amount",
+  "fieldTypeNumber": "number",
+  "fieldTypeFlag": "yes / no",
   "words": "Words",
   "wordsHint": "Words in a document that speak for this kind; a kind is suggested from 6.",
   "addWord": "Add a word",
@@ -156,11 +510,9 @@
     }
   },
   "catalog": "Catalog",
-  "catalogHint": "Templates of kinds from the catalogs you use – read now. Taking one over adds its kinds; kinds you changed keep your changes.",
-  "standingNew": "new",
+  "catalogIntro": "Templates of kinds from the catalogs you use – read now. Taking one over adds its kinds; kinds you changed keep your changes.",
   "standingTaken": "taken",
   "standingUpdate": "update available",
-  "take": "Take over",
   "update": "Update",
   "plan": "What happens",
   "stepNew": "added",
@@ -177,10 +529,9 @@
     }
   },
   "sources": "Sources",
-  "sourcesHint": "Catalogs this device reads templates from. The official one can be switched off.",
+  "sourcesIntro": "Catalogs this device reads templates from. The official one can be switched off.",
   "addSource": "Add a source",
   "sourceAddress": "Address (https://…)",
-  "official": "official",
   "scan": "Scan",
   "scanHint": "Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.",
   "takePhoto": "Take a photo",

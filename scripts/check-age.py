@@ -26,7 +26,7 @@ SECURITY_FIXES = {
     ("webpki-roots", "1.0.10"): "RUSTSEC-2026-0381",
     ("webpki-root-certs", "1.0.10"): "RUSTSEC-2026-0383",
 }
-OWN = {"aktujo-base", "aktujo-blob", "aktujo-core", "aktujo-crypt", "aktujo-doc", "aktujo-extract", "aktujo-log", "aktujo-relay", "aktujo-rules", "aktujo-scan", "aktujo-sdk", "aktujo-store", "aktujo-sync"}
+OWN = {"aktujo-base", "aktujo-blob", "aktujo-core", "aktujo-crypt", "aktujo-doc", "aktujo-extract", "aktujo-locales", "aktujo-log", "aktujo-relay", "aktujo-rules", "aktujo-scan", "aktujo-sdk", "aktujo-store", "aktujo-sync"}
 HEADERS = {"User-Agent": "aktujo-apps check-age (https://github.com/aktujo/apps)"}
 
 

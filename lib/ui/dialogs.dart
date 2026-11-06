@@ -50,11 +50,11 @@ Future<bool> askSure(BuildContext context, String question, String action) async
 
 /// The name of a type of field, as people read it.
 String typeLabel(AppLocalizations l, String type) => switch (type) {
-  'date' => l.typeDate,
-  'money' => l.typeMoney,
-  'number' => l.typeNumber,
-  'flag' => l.typeFlag,
-  _ => l.typeText,
+  'date' => l.fieldTypeDate,
+  'money' => l.fieldTypeMoney,
+  'number' => l.fieldTypeNumber,
+  'flag' => l.fieldTypeFlag,
+  _ => l.fieldTypeText,
 };
 
 /// How a value of a type is typed.

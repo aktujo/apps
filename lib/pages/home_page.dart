@@ -87,7 +87,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _foundSpace() async {
     final l = AppLocalizations.of(context);
-    final name = await _ask(l.newSpace, l.spaceName);
+    final name = await _ask(l.spaceNew, l.spaceName);
     if (name == null || name.trim().isEmpty) return;
     await _run(() async {
       _space = await _archive.foundSpace(name: name);
@@ -163,7 +163,7 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context), child: Text(l.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(context, controller.text), child: Text(l.found)),
+          FilledButton(onPressed: () => Navigator.pop(context, controller.text), child: Text(l.spaceFound)),
         ],
       ),
     );
@@ -187,7 +187,7 @@ class _HomePageState extends State<HomePage> {
     if (paths.isEmpty) return;
     await _run(() async {
       final added = await _archive.addFiles(space: space, paths: paths);
-      if (mounted) setState(() => _message = AppLocalizations.of(context).added(added));
+      if (mounted) setState(() => _message = AppLocalizations.of(context).docAdded(added));
       await _load();
     });
   }
@@ -275,13 +275,13 @@ class _HomePageState extends State<HomePage> {
         title: Text(title),
         actions: [
           if (_space != null)
-            IconButton(icon: const Icon(Icons.category_outlined), tooltip: l.kinds, onPressed: _openKinds),
+            IconButton(icon: const Icon(Icons.category_outlined), tooltip: l.kindsTitle, onPressed: _openKinds),
           if (_space != null)
             IconButton(
               icon: Icon(
                 _spaces.where((s) => s.id == _space).firstOrNull?.relay == null ? Icons.cloud_off : Icons.sync,
               ),
-              tooltip: l.sync,
+              tooltip: l.syncTitle,
               onPressed: _openSync,
             ),
         ],
@@ -304,7 +304,7 @@ class _HomePageState extends State<HomePage> {
                   heroTag: 'add',
                   onPressed: _addFiles,
                   icon: const Icon(Icons.add),
-                  label: Text(l.addFiles),
+                  label: Text(l.docAdd),
                 ),
               ],
             ),
@@ -353,8 +353,8 @@ class _SpaceList extends StatelessWidget {
             selected: space.id == chosen,
             onTap: () => onChoose(space.id),
           ),
-        ListTile(leading: const Icon(Icons.add), title: Text(l.newSpace), onTap: onFound),
-        ListTile(leading: const Icon(Icons.group_add), title: Text(l.join), onTap: onJoin),
+        ListTile(leading: const Icon(Icons.add), title: Text(l.spaceNew), onTap: onFound),
+        ListTile(leading: const Icon(Icons.group_add), title: Text(l.settingsJoin), onTap: onJoin),
       ],
     );
   }
@@ -379,9 +379,9 @@ class _FirstSpace extends StatelessWidget {
             const SizedBox(height: 16),
             Text(l.firstSpace, textAlign: TextAlign.center),
             const SizedBox(height: 16),
-            FilledButton(onPressed: onFound, child: Text(l.newSpace)),
+            FilledButton(onPressed: onFound, child: Text(l.spaceNew)),
             const SizedBox(height: 8),
-            TextButton(onPressed: onJoin, child: Text(l.join)),
+            TextButton(onPressed: onJoin, child: Text(l.settingsJoin)),
           ],
         ),
       ),

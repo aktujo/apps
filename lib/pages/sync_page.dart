@@ -78,19 +78,19 @@ class _SyncPageState extends State<SyncPage> {
     final code = await widget.archive.startSync(space: widget.space, relay: _relay.text.trim(), name: _name.text);
     if (!mounted) return;
     final l = AppLocalizations.of(context);
-    await _show(l.recoveryCode, l.recoveryCodeHint, code);
+    await _show(l.syncCode, l.recoveryCodeHint, code);
   });
 
   Future<void> _syncNow() => _run(() async {
     final report = await widget.archive.syncNow(space: widget.space);
-    if (mounted) setState(() => _message = AppLocalizations.of(context).syncResult(report.received, report.sent));
+    if (mounted) setState(() => _message = AppLocalizations.of(context).syncReport(report.received, report.sent));
   });
 
   Future<void> _invite() => _run(() async {
     final invitation = await widget.archive.invite(space: widget.space, rights: _rights);
     if (!mounted) return;
     final l = AppLocalizations.of(context);
-    await _show(l.invitation, l.inviteHint, invitation);
+    await _show(l.syncInvitationField, l.inviteHint, invitation);
   });
 
   Future<void> _remove(MemberItem member) async {
@@ -102,7 +102,7 @@ class _SyncPageState extends State<SyncPage> {
         content: Text(l.removeMemberConfirm(name)),
         actions: [
           TextButton(onPressed: () => Navigator.pop(context, false), child: Text(l.cancel)),
-          FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l.removeMember)),
+          FilledButton(onPressed: () => Navigator.pop(context, true), child: Text(l.syncRemove)),
         ],
       ),
     );
@@ -132,10 +132,10 @@ class _SyncPageState extends State<SyncPage> {
             onPressed: () async {
               await Clipboard.setData(ClipboardData(text: text));
               if (context.mounted) {
-                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.copied)));
+                ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(l.syncCopied)));
               }
             },
-            child: Text(l.copy),
+            child: Text(l.syncCopy),
           ),
           FilledButton(onPressed: () => Navigator.pop(context), child: Text(l.done)),
         ],
@@ -144,9 +144,9 @@ class _SyncPageState extends State<SyncPage> {
   }
 
   String _rightsText(AppLocalizations l, String rights) => switch (rights) {
-    'read' => l.rightsRead,
-    'manage' => l.rightsManage,
-    _ => l.rightsWrite,
+    'read' => l.mayRead,
+    'manage' => l.mayManage,
+    _ => l.mayWrite,
   };
 
   @override
@@ -156,7 +156,7 @@ class _SyncPageState extends State<SyncPage> {
     final muted = TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant);
     final heading = Theme.of(context).textTheme.titleMedium;
     return Scaffold(
-      appBar: AppBar(title: Text(l.sync)),
+      appBar: AppBar(title: Text(l.syncTitle)),
       body: space == null
           ? const Center(child: CircularProgressIndicator())
           : ListView(
@@ -169,14 +169,14 @@ class _SyncPageState extends State<SyncPage> {
                   TextField(
                     controller: _relay,
                     keyboardType: TextInputType.url,
-                    decoration: InputDecoration(labelText: l.relay, hintText: 'http://192.168.1.10:8072'),
+                    decoration: InputDecoration(labelText: l.syncRelay, hintText: 'http://192.168.1.10:8072'),
                   ),
                   TextField(
                     controller: _name,
-                    decoration: InputDecoration(labelText: l.deviceName, helperText: l.deviceNameHint),
+                    decoration: InputDecoration(labelText: l.settingsDeviceName, helperText: l.deviceNameHint),
                   ),
                   const SizedBox(height: 16),
-                  FilledButton(onPressed: _busy ? null : _start, child: Text(l.startSync)),
+                  FilledButton(onPressed: _busy ? null : _start, child: Text(l.syncStart)),
                 ] else ...[
                   Text(space.relay!, style: heading),
                   if (space.rights != null) Text(_rightsText(l, space.rights!), style: muted),
@@ -202,9 +202,9 @@ class _SyncPageState extends State<SyncPage> {
                     const SizedBox(height: 8),
                     SegmentedButton<String>(
                       segments: [
-                        ButtonSegment(value: 'read', label: Text(l.rightsRead)),
-                        ButtonSegment(value: 'write', label: Text(l.rightsWrite)),
-                        ButtonSegment(value: 'manage', label: Text(l.rightsManage)),
+                        ButtonSegment(value: 'read', label: Text(l.mayRead)),
+                        ButtonSegment(value: 'write', label: Text(l.mayWrite)),
+                        ButtonSegment(value: 'manage', label: Text(l.mayManage)),
                       ],
                       selected: {_rights},
                       onSelectionChanged: (chosen) => setState(() => _rights = chosen.first),
@@ -214,13 +214,13 @@ class _SyncPageState extends State<SyncPage> {
                   ],
                   if (_members.isNotEmpty) ...[
                     const SizedBox(height: 24),
-                    Text(l.members, style: heading),
+                    Text(l.syncMembers, style: heading),
                     for (final member in _members)
                       ListTile(
-                        title: Text(member.role == 'recovery' ? l.recoveryMember : (member.name ?? member.id)),
+                        title: Text(member.role == 'recovery' ? l.syncCode : (member.name ?? member.id)),
                         subtitle: Text(_rightsText(l, member.rights)),
                         trailing: space.rights == 'manage' && member.role != 'recovery'
-                            ? TextButton(onPressed: () => _remove(member), child: Text(l.removeMember))
+                            ? TextButton(onPressed: () => _remove(member), child: Text(l.syncRemove))
                             : null,
                       ),
                   ],

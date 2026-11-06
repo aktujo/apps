@@ -59,21 +59,21 @@ class _JoinPageState extends State<JoinPage> {
     final muted = TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant);
     final heading = Theme.of(context).textTheme.titleMedium;
     return Scaffold(
-      appBar: AppBar(title: Text(l.join)),
+      appBar: AppBar(title: Text(l.settingsJoin)),
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
           if (_error != null) Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
           TextField(
             controller: _name,
-            decoration: InputDecoration(labelText: l.deviceName, helperText: l.deviceNameHint),
+            decoration: InputDecoration(labelText: l.settingsDeviceName, helperText: l.deviceNameHint),
           ),
           const SizedBox(height: 24),
-          Text(l.join, style: heading),
-          Text(l.joinHint, style: muted),
+          Text(l.settingsJoin, style: heading),
+          Text(l.settingsJoinHint, style: muted),
           TextField(
             controller: _invitation,
-            decoration: InputDecoration(labelText: l.invitation),
+            decoration: InputDecoration(labelText: l.syncInvitationField),
             maxLines: 3,
             minLines: 1,
           ),
@@ -82,7 +82,7 @@ class _JoinPageState extends State<JoinPage> {
             onPressed: _busy
                 ? null
                 : () => _run(() => widget.archive.join(invitation: _invitation.text, name: _name.text)),
-            child: Text(l.join),
+            child: Text(l.settingsJoin),
           ),
           const SizedBox(height: 32),
           Text(l.recover, style: heading),
@@ -90,7 +90,7 @@ class _JoinPageState extends State<JoinPage> {
           TextField(
             controller: _relay,
             keyboardType: TextInputType.url,
-            decoration: InputDecoration(labelText: l.relay),
+            decoration: InputDecoration(labelText: l.syncRelay),
           ),
           TextField(
             controller: _space,
@@ -98,7 +98,7 @@ class _JoinPageState extends State<JoinPage> {
           ),
           TextField(
             controller: _code,
-            decoration: InputDecoration(labelText: l.code),
+            decoration: InputDecoration(labelText: l.syncCode),
           ),
           const SizedBox(height: 8),
           OutlinedButton(

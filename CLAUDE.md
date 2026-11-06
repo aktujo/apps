@@ -36,7 +36,10 @@ checks.
   `scripts/check-age.py` after changing `rust/Cargo.lock`.
 - `lib/src/rust/` and `rust/src/frb_generated.rs` are generated (`flutter_rust_bridge_codegen generate`) – change
   `rust/src/api/` and generate again, never edit them.
-- Strings in `lib/l10n/app_en.arb` and `app_de.arb`; English is the source.
+- Strings: the app's own in `l10n/app_en.arb` and `app_de.arb` (English is the source); the texts shared with aktujo's
+  web app and terminal interface come from the crate `aktujo-locales` (`docAdded` for its `doc.added`). Change them
+  there, not here. `scripts/l10n.py` writes `lib/l10n/app_*.arb` from both (generated – never edit them), then
+  `flutter gen-l10n`; an own key that is a shared one too is an error.
 - aktujo's look: colours and Space Mono from aktujo/brand (`lib/ui/theme.dart`); the accent on dark only for areas,
   never for small text.
 - Platforms as falkOSS builds them: macOS 27 on Apple silicon, iOS 27, Android 13 (API 33) on arm64, Windows 11 on

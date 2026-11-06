@@ -20,7 +20,8 @@ black and white (`aktujo-scan`); OPEN: finding the edges of a page and its persp
 
 | Path | What |
 |---|---|
-| `lib/` | the app in Dart: `main.dart`, `app/` (opening the archive, its key in the system's secure storage), `pages/`, `ui/theme.dart` (aktujo's colours and Space Mono), `l10n/` (English and German) |
+| `lib/` | the app in Dart: `main.dart`, `app/` (opening the archive, its key in the system's secure storage), `pages/`, `ui/theme.dart` (aktujo's colours and Space Mono), `l10n/` (English and German – generated) |
+| `l10n/` | the app's own texts, English and German; with the shared ones of `aktujo-locales`, `scripts/l10n.py` writes `lib/l10n/` |
 | `lib/src/rust/` | the bindings to the Rust side – generated |
 | `rust/` | the Rust side (`aktujo_bridge`): `src/api/` translates `aktujo-sdk` for Dart; a workspace of its own with exact, permissive dependencies |
 | `rust_builder/` | cargokit, which builds `rust/` for each platform |

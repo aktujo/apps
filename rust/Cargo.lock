@@ -38,9 +38,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-base"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "32998d75e16db58268ae78722c37998538fad86d66476d3b1cd3ac55c298354f"
+checksum = "1b7a9037e47bcf62806009790dca1122da09e697fc564c4d93ca4ade3096a9d3"
 dependencies = [
  "base64",
  "getrandom 0.4.3",
@@ -53,9 +53,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-blob"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "385f13480f79b54888f39c3a8349272b2fe3621f31d596bef331bab4b71c2b14"
+checksum = "6bcd51e45bb4bcf344142946873f2ebb2ab768097038e1c8969df4121021e416"
 dependencies = [
  "aktujo-base",
  "thiserror",
@@ -63,9 +63,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-core"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9439270a446ac0be1a2088e1d320029d5e2dc5077eecac4b8fae812985545e62"
+checksum = "ea1f62a0bb1f09dff57b5eb3f0a3baef64ca2f39b43d86b5ed02c4d7645b01ff"
 dependencies = [
  "serde",
  "thiserror",
@@ -73,9 +73,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-crypt"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "9ed1f758042f1bbede274137fa234d5e501dc19ca69cff9574d1195ecdffdb70"
+checksum = "e9615717ecf0f612e6af3921ee9d31df4111f47e83a02026268db9220e5aa383"
 dependencies = [
  "aktujo-base",
  "aktujo-log",
@@ -93,9 +93,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-doc"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "37a6c939965ee1c86a25a95ccf3f5376bb54df347fa32eed92cd80fcc08e11f4"
+checksum = "a6ca81593ef55fe53b90efd77717117b4ff05f003d53ace00563458d170d5357"
 dependencies = [
  "aktujo-base",
  "aktujo-log",
@@ -106,9 +106,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-extract"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d356e1e75829e588b6c9ed616629746949cffd4f15a15ede6524c5ef3238a067"
+checksum = "6a06efcb203e64cfd7d57afae21beac643b761f1468052702579330031376426"
 dependencies = [
  "aktujo-base",
  "hayro",
@@ -117,10 +117,16 @@ dependencies = [
 ]
 
 [[package]]
-name = "aktujo-log"
-version = "0.3.0"
+name = "aktujo-locales"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a9d0d697d1ec47a1435ba11d9bffa053adb6a6a3b5341479587b51fc4c338fe5"
+checksum = "b1b34bf3eb8e9bb56146f35edfdb1f71e6425c0c408a95639d4fe242bd221741"
+
+[[package]]
+name = "aktujo-log"
+version = "0.3.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "88b76d330c4f7dc15e2487a940bf3d3508c3fcfed3d493cc08ef436ff6729927"
 dependencies = [
  "aktujo-base",
  "serde",
@@ -130,9 +136,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-relay"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "63afd1d7c3c874b3987209f1924322283dabf2b8cdc9e149d928d69f615eddc0"
+checksum = "39dd71ede9ff7a2b32257c63d35dfccb81a640c4506991334a309c571e356afa"
 dependencies = [
  "aktujo-base",
  "aktujo-crypt",
@@ -145,9 +151,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-rules"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cc7a0359b0a54b9dbd6bb5d61af8104b60943a3410994205c18ce4df2b20e39f"
+checksum = "0ee56a7387239b5e2b4fcab7a12482dcf0be47995d0cf9561fafa24330961633"
 dependencies = [
  "aktujo-doc",
  "aktujo-extract",
@@ -157,9 +163,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-scan"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b1fc1d016aeecf0f5f4625a5fcf97dabfc799d60286b829c29dc5da572c07cb6"
+checksum = "4cccf13c1ddf0e9baec90197a70e9efc84bfaae51b4393ef76becdea67d85845"
 dependencies = [
  "hayro",
  "image",
@@ -170,9 +176,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-sdk"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "ce427f0045ed91492e90c5cc268ac62541dfa9e54007e021ad3ad84ca117be52"
+checksum = "3573a90faa635851c68551ceeef6e1f6f595bccc409af60ac3f453af62b9df92"
 dependencies = [
  "aktujo-base",
  "aktujo-blob",
@@ -200,9 +206,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-store"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "7478899f7ef7a237114584cf454bee7ecf235dbd9129ec5901afb21868fcdd16"
+checksum = "7fb873a73a97a05b7882dd912f4aaba57639669a0fe981a5b0e50fcd4b518c19"
 dependencies = [
  "aktujo-base",
  "aktujo-crypt",
@@ -213,9 +219,9 @@ dependencies = [
 
 [[package]]
 name = "aktujo-sync"
-version = "0.3.0"
+version = "0.3.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "86ba35e3b06bef104d58b7023fed3a6642da22aca54cbf2bcfd0ebcecc7e1fbb"
+checksum = "3c5df0922d9abb853060245a6c7db74e4897a23a1b6e31555d2b9673544f6ad6"
 dependencies = [
  "aktujo-base",
  "aktujo-blob",
@@ -234,6 +240,7 @@ name = "aktujo_bridge"
 version = "0.2.0"
 dependencies = [
  "aktujo-crypt",
+ "aktujo-locales",
  "aktujo-relay",
  "aktujo-sdk",
  "flutter_rust_bridge",

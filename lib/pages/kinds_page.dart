@@ -90,7 +90,7 @@ class _KindsPageState extends State<KindsPage> {
               const SizedBox(height: 12),
               DropdownButtonFormField<String>(
                 initialValue: type,
-                decoration: InputDecoration(labelText: l.fieldType),
+                decoration: InputDecoration(labelText: l.kindsFieldType),
                 items: [
                   for (final t in ['text', 'date', 'money', 'number', 'flag'])
                     DropdownMenuItem(value: t, child: Text(typeLabel(l, t))),
@@ -181,7 +181,7 @@ class _KindsPageState extends State<KindsPage> {
     final muted = TextStyle(color: Theme.of(context).colorScheme.onSurfaceVariant);
     return Scaffold(
       appBar: AppBar(
-        title: Text(l.kinds),
+        title: Text(l.kindsTitle),
         actions: [
           IconButton(icon: const Icon(Icons.storefront), tooltip: l.catalog, onPressed: _catalog),
           IconButton(icon: const Icon(Icons.file_open), tooltip: l.importKinds, onPressed: _import),
@@ -197,7 +197,7 @@ class _KindsPageState extends State<KindsPage> {
           : ListView(
               padding: const EdgeInsets.fromLTRB(16, 16, 16, 96),
               children: [
-                Text(l.kindsHint, style: muted),
+                Text(l.kindsIntro, style: muted),
                 if (_message != null) Text(_message!, style: muted),
                 if (_error != null) Text(_error!, style: TextStyle(color: Theme.of(context).colorScheme.error)),
                 const SizedBox(height: 8),
