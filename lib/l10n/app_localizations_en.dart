@@ -1065,7 +1065,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get scanHint =>
-      'Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.';
+      'Photograph the pages – or choose images – and aktujo makes one PDF of them: the sheet found, straightened, trimmed, in black and white if you like.';
 
   @override
   String get takePhoto => 'Take a photo';
@@ -1089,6 +1089,18 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get moveDown => 'Down';
+
+  @override
+  String get findSheet => 'Find the sheet and correct its perspective';
+
+  @override
+  String get corners => 'Corners';
+
+  @override
+  String get cornersHint => 'Drag each corner onto a corner of the sheet.';
+
+  @override
+  String get wholePhoto => 'Whole photo';
 
   @override
   String get straighten => 'Straighten';

@@ -7,18 +7,33 @@ import '../frb_generated.dart';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `change_kind`, `changed`, `document_id`, `hex`, `improve`, `item`, `language`, `lock`, `member_item`, `optional`, `reading_name`, `rights_name`, `rights_of`, `scanned`, `show`, `space_id`, `step_name`, `type_name`, `type_of`, `unhex`, `value_of`
+// These functions are ignored because they are not marked as `pub`: `change_kind`, `changed`, `document_id`, `hex`, `improve`, `item`, `language`, `lock`, `member_item`, `optional`, `quad`, `reading_name`, `rights_name`, `rights_of`, `scanned`, `show`, `space_id`, `step_name`, `type_name`, `type_of`, `unhex`, `value_of`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `HandedKey`
 // These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
 
-/// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, turned `turn` quarters and
-/// improved as `options` say.
+/// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, the sheet cut out along
+/// `corners` (eight shares, or none), turned `turn` quarters and improved as `options` say.
 Future<Uint8List> scanPreview({
   required String path,
   required int turn,
+  required List<double> corners,
   required ScanOptions options,
   required int width,
-}) => RustLib.instance.api.crateApiArchiveScanPreview(path: path, turn: turn, options: options, width: width);
+}) => RustLib.instance.api.crateApiArchiveScanPreview(
+  path: path,
+  turn: turn,
+  corners: corners,
+  options: options,
+  width: width,
+);
+
+/// The photo at `path` as it is, as PNG `width` pixels wide – to place the corners of the sheet on.
+Future<Uint8List> scanPhoto({required String path, required int width}) =>
+    RustLib.instance.api.crateApiArchiveScanPhoto(path: path, width: width);
+
+/// The corners of the sheet of paper in the photo at `path`, as eight shares (see [`ScanOptions::corners`]); empty
+/// if the page fills the photo already or no sheet stands out.
+Future<Float32List> scanCorners({required String path}) => RustLib.instance.api.crateApiArchiveScanCorners(path: path);
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Archive>>
 abstract class Archive implements RustOpaqueInterface {
@@ -505,6 +520,11 @@ class ScanOptions {
   final double cropRight;
   final double cropBottom;
 
+  /// The corners of the sheet on each page, by its number from 0, on the photo as it is (before turning): eight
+  /// shares of its width and height – x and y of the top left, top right, bottom right and bottom left. The sheet is
+  /// cut out along them and its perspective corrected; empty: the page as it is.
+  final List<Float32List> corners;
+
   const ScanOptions({
     required this.deskew,
     required this.colour,
@@ -513,6 +533,7 @@ class ScanOptions {
     required this.cropTop,
     required this.cropRight,
     required this.cropBottom,
+    required this.corners,
   });
 
   @override
@@ -523,7 +544,8 @@ class ScanOptions {
       cropLeft.hashCode ^
       cropTop.hashCode ^
       cropRight.hashCode ^
-      cropBottom.hashCode;
+      cropBottom.hashCode ^
+      corners.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -536,7 +558,8 @@ class ScanOptions {
           cropLeft == other.cropLeft &&
           cropTop == other.cropTop &&
           cropRight == other.cropRight &&
-          cropBottom == other.cropBottom;
+          cropBottom == other.cropBottom &&
+          corners == other.corners;
 }
 
 /// A source of templates on this device.

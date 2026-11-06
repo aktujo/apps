@@ -40,7 +40,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.13.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1885599664;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1598103051;
 
 // Section: executor
 
@@ -1978,6 +1978,63 @@ fn wire__crate__api__archive__Archive_take_template_impl(
         },
     )
 }
+fn wire__crate__api__archive__scan_corners_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "scan_corners",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_)
+            };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_path = <String>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::archive::scan_corners(api_path)?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__archive__scan_photo_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "scan_photo",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_)
+            };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_path = <String>::sse_decode(&mut deserializer);
+            let api_width = <u32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::archive::scan_photo(api_path, api_width)?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 fn wire__crate__api__archive__scan_preview_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
@@ -1997,12 +2054,14 @@ fn wire__crate__api__archive__scan_preview_impl(
             let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
             let api_path = <String>::sse_decode(&mut deserializer);
             let api_turn = <u8>::sse_decode(&mut deserializer);
+            let api_corners = <Vec<f32>>::sse_decode(&mut deserializer);
             let api_options = <crate::api::archive::ScanOptions>::sse_decode(&mut deserializer);
             let api_width = <u32>::sse_decode(&mut deserializer);
             deserializer.end();
             move |context| {
                 transform_result_sse::<_, String>((move || {
-                    let output_ok = crate::api::archive::scan_preview(api_path, api_turn, api_options, api_width)?;
+                    let output_ok =
+                        crate::api::archive::scan_preview(api_path, api_turn, api_corners, api_options, api_width)?;
                     std::result::Result::Ok(output_ok)
                 })())
             }
@@ -2238,6 +2297,18 @@ impl SseDecode for Vec<crate::api::archive::KindItem> {
     }
 }
 
+impl SseDecode for Vec<Vec<f32>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = Vec::with_capacity(len_ as usize);
+        for idx_ in 0..len_ {
+            ans_.push(<Vec<f32>>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<crate::api::archive::MemberItem> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2257,6 +2328,18 @@ impl SseDecode for Vec<crate::api::archive::PlannedItem> {
         let mut ans_ = Vec::with_capacity(len_ as usize);
         for idx_ in 0..len_ {
             ans_.push(<crate::api::archive::PlannedItem>::sse_decode(deserializer));
+        }
+        return ans_;
+    }
+}
+
+impl SseDecode for Vec<f32> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = Vec::with_capacity(len_ as usize);
+        for idx_ in 0..len_ {
+            ans_.push(<f32>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -2393,6 +2476,7 @@ impl SseDecode for crate::api::archive::ScanOptions {
         let mut var_cropTop = <f32>::sse_decode(deserializer);
         let mut var_cropRight = <f32>::sse_decode(deserializer);
         let mut var_cropBottom = <f32>::sse_decode(deserializer);
+        let mut var_corners = <Vec<Vec<f32>>>::sse_decode(deserializer);
         return crate::api::archive::ScanOptions {
             deskew: var_deskew,
             colour: var_colour,
@@ -2401,6 +2485,7 @@ impl SseDecode for crate::api::archive::ScanOptions {
             crop_top: var_cropTop,
             crop_right: var_cropRight,
             crop_bottom: var_cropBottom,
+            corners: var_corners,
         };
     }
 }
@@ -2593,7 +2678,9 @@ fn pde_ffi_dispatcher_primary_impl(
         41 => wire__crate__api__archive__Archive_start_sync_impl(port, ptr, rust_vec_len, data_len),
         42 => wire__crate__api__archive__Archive_sync_now_impl(port, ptr, rust_vec_len, data_len),
         43 => wire__crate__api__archive__Archive_take_template_impl(port, ptr, rust_vec_len, data_len),
-        44 => wire__crate__api__archive__scan_preview_impl(port, ptr, rust_vec_len, data_len),
+        44 => wire__crate__api__archive__scan_corners_impl(port, ptr, rust_vec_len, data_len),
+        45 => wire__crate__api__archive__scan_photo_impl(port, ptr, rust_vec_len, data_len),
+        46 => wire__crate__api__archive__scan_preview_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2816,6 +2903,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::archive::ScanOptions {
             self.crop_top.into_into_dart().into_dart(),
             self.crop_right.into_into_dart().into_dart(),
             self.crop_bottom.into_into_dart().into_dart(),
+            self.corners.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -3110,6 +3198,16 @@ impl SseEncode for Vec<crate::api::archive::KindItem> {
     }
 }
 
+impl SseEncode for Vec<Vec<f32>> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <Vec<f32>>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<crate::api::archive::MemberItem> {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -3126,6 +3224,16 @@ impl SseEncode for Vec<crate::api::archive::PlannedItem> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <crate::api::archive::PlannedItem>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Vec<f32> {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <f32>::sse_encode(item, serializer);
         }
     }
 }
@@ -3240,6 +3348,7 @@ impl SseEncode for crate::api::archive::ScanOptions {
         <f32>::sse_encode(self.crop_top, serializer);
         <f32>::sse_encode(self.crop_right, serializer);
         <f32>::sse_encode(self.crop_bottom, serializer);
+        <Vec<Vec<f32>>>::sse_encode(self.corners, serializer);
     }
 }
 

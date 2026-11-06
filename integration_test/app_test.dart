@@ -290,12 +290,23 @@ void main() {
     await tester.pumpAndSettle();
     expect(find.text('No pages yet.'), findsOneWidget);
     expect(find.text('Take a photo'), findsNothing, reason: 'a computer chooses images');
+    expect(find.text('Find the sheet and correct its perspective'), findsOneWidget);
     await tester.tap(find.text('grey'));
     await tester.tap(find.text('Choose images'));
     await waitFor(tester, find.byType(Image), timeout: const Duration(seconds: 30));
     await tester.scrollUntilVisible(find.text('Page 1'), 200);
     expect(find.text('Page 1'), findsOneWidget);
     await tester.tap(find.byTooltip('Turn').first);
+    await tester.pump(const Duration(milliseconds: 400));
+    // The corners of the sheet, moved by hand: the top left a little inwards.
+    await tester.tap(find.byTooltip('Corners').first);
+    await waitFor(tester, find.byKey(const ValueKey('corner-0')), timeout: const Duration(seconds: 30));
+    expect(find.text('Drag each corner onto a corner of the sheet.'), findsOneWidget);
+    await tester.drag(find.byKey(const ValueKey('corner-0')), const Offset(40, 30));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Done'));
+    await tester.pumpAndSettle();
+    expect(find.byTooltip('Corners'), findsWidgets);
     await tester.pump(const Duration(milliseconds: 400));
     await tester.scrollUntilVisible(find.text('Save as a document'), 300);
     await tester.enterText(find.widgetWithText(TextField, 'Title'), 'Letter');

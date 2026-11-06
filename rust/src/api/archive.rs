@@ -17,7 +17,8 @@ use aktujo_sdk::{
     Workspace, date_of, fetch_catalog, fetch_template, kind_id, media_type_of, source_url,
 };
 use aktujo_sdk::{
-    Colour, Crop, Improve, VersionFile, Zip, ZipFiles, combined, export, export_name, import, preview_png,
+    Colour, Crop, Improve, Quad, VersionFile, Zip, ZipFiles, combined, export, export_name, import, page_png,
+    preview_png,
 };
 
 /// How often synchronised spaces are synchronised, besides after every change.
@@ -325,10 +326,27 @@ pub struct ScanOptions {
     pub crop_top: f32,
     pub crop_right: f32,
     pub crop_bottom: f32,
+    /// The corners of the sheet on each page, by its number from 0, on the photo as it is (before turning): eight
+    /// shares of its width and height – x and y of the top left, top right, bottom right and bottom left. The sheet is
+    /// cut out along them and its perspective corrected; empty: the page as it is.
+    pub corners: Vec<Vec<f32>>,
+}
+
+/// Eight shares as the corners of a sheet; none for none.
+fn quad(points: &[f32]) -> Result<Option<Quad>, String> {
+    if points.is_empty() {
+        return Ok(None);
+    }
+    let [a, b, c, d, e, f, g, h] = points else { return Err("corners are eight numbers".into()) };
+    let quad = Quad { points: [[*a, *b], [*c, *d], [*e, *f], [*g, *h]] };
+    if !quad.is_valid() {
+        return Err("the corners do not make a sheet".into());
+    }
+    Ok(Some(quad))
 }
 
 impl ScanOptions {
-    fn improve(&self, turns: Vec<u8>) -> Result<Improve, String> {
+    fn improve(&self, turns: Vec<u8>, corners: &[Vec<f32>]) -> Result<Improve, String> {
         let crop = Crop { left: self.crop_left, top: self.crop_top, right: self.crop_right, bottom: self.crop_bottom };
         let cropped = [crop.left, crop.top, crop.right, crop.bottom];
         if cropped.iter().any(|share| !(0.0..=0.45).contains(share)) {
@@ -336,6 +354,8 @@ impl ScanOptions {
         }
         Ok(Improve {
             pages: None,
+            corners: corners.iter().map(|points| quad(points)).collect::<Result<_, _>>()?,
+            find_corners: false,
             turns,
             deskew: self.deskew,
             crop: cropped.iter().any(|share| *share > 0.0).then_some(crop),
@@ -358,12 +378,30 @@ fn scanned(path: &str) -> Result<VersionFile, String> {
     Ok(VersionFile { name: name.to_owned(), media_type: media_type.to_owned(), bytes })
 }
 
-/// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, turned `turn` quarters and
-/// improved as `options` say.
-pub fn scan_preview(path: String, turn: u8, options: ScanOptions, width: u32) -> Result<Vec<u8>, String> {
+/// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, the sheet cut out along
+/// `corners` (eight shares, or none), turned `turn` quarters and improved as `options` say.
+pub fn scan_preview(
+    path: String,
+    turn: u8,
+    corners: Vec<f32>,
+    options: ScanOptions,
+    width: u32,
+) -> Result<Vec<u8>, String> {
     let file = scanned(&path)?;
-    let improve = options.improve(vec![turn])?;
+    let improve = options.improve(vec![turn], &[corners])?;
     preview_png(&file, &improve, 0, width).map_err(|e| e.to_string())
+}
+
+/// The photo at `path` as it is, as PNG `width` pixels wide – to place the corners of the sheet on.
+pub fn scan_photo(path: String, width: u32) -> Result<Vec<u8>, String> {
+    page_png(&scanned(&path)?, 0, width).map_err(|e| e.to_string())
+}
+
+/// The corners of the sheet of paper in the photo at `path`, as eight shares (see [`ScanOptions::corners`]); empty
+/// if the page fills the photo already or no sheet stands out.
+pub fn scan_corners(path: String) -> Result<Vec<f32>, String> {
+    let found = aktujo_sdk::find_corners(&scanned(&path)?, 0).map_err(|e| e.to_string())?;
+    Ok(found.map(|quad| quad.points.concat()).unwrap_or_default())
 }
 
 fn step_name(step: Step) -> String {
@@ -668,8 +706,10 @@ impl Archive {
         let files = paths.iter().map(|p| scanned(p)).collect::<Result<Vec<_>, _>>()?;
         let mut turns = options.turns.clone();
         turns.resize(files.len(), 0);
+        let mut corners = options.corners.clone();
+        corners.resize(files.len(), Vec::new());
         // Improved without holding the workspace: it takes a while for many pages.
-        let written = combined(&files, &options.improve(turns)?).map_err(|e| e.to_string())?;
+        let written = combined(&files, &options.improve(turns, &corners)?).map_err(|e| e.to_string())?;
         let title = title.trim();
         let name = format!("{}.pdf", if title.is_empty() { "Scan" } else { title });
         let new_file = NewFile { name: &name, media_type: written.media_type, bytes: &written.bytes };
@@ -1248,6 +1288,58 @@ mod tests {
     }
 
     #[test]
+    fn the_sheet_in_a_photo_is_found_and_cut_out() {
+        let folder = std::env::temp_dir().join(format!("aktujo-bridge-corners-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&folder);
+        std::fs::create_dir_all(&folder).unwrap();
+        // A sheet of 300 × 400 on a dark table of 500 × 600, 100 pixels from the top left.
+        let path = folder.join("photo.png");
+        let image = image::RgbImage::from_fn(500, 600, |x, y| {
+            if (100..400).contains(&x) && (100..500).contains(&y) {
+                if (y / 6) % 4 == 0 && (130..370).contains(&x) {
+                    image::Rgb([30, 30, 40])
+                } else {
+                    image::Rgb([235, 230, 220])
+                }
+            } else {
+                image::Rgb([60, 50, 40])
+            }
+        });
+        image.save(&path).unwrap();
+        let path = path.to_string_lossy().into_owned();
+
+        let corners = scan_corners(path.clone()).unwrap();
+        assert_eq!(corners.len(), 8);
+        let expected = [0.2, 1.0 / 6.0, 0.8, 1.0 / 6.0, 0.8, 5.0 / 6.0, 0.2, 5.0 / 6.0];
+        assert!(corners.iter().zip(expected).all(|(c, e)| (c - e).abs() < 0.02), "{corners:?}");
+
+        let options = ScanOptions {
+            deskew: false,
+            colour: "keep".into(),
+            turns: vec![],
+            crop_left: 0.0,
+            crop_top: 0.0,
+            crop_right: 0.0,
+            crop_bottom: 0.0,
+            corners: vec![],
+        };
+        let cut = scan_preview(path.clone(), 0, corners, options.clone(), 1000).unwrap();
+        let cut = image::load_from_memory(&cut).unwrap();
+        assert!(
+            cut.width().abs_diff(300) <= 8 && cut.height().abs_diff(400) <= 8,
+            "{} × {}",
+            cut.width(),
+            cut.height()
+        );
+        let photo = image::load_from_memory(&scan_photo(path.clone(), 250).unwrap()).unwrap();
+        assert_eq!((photo.width(), photo.height()), (250, 300), "the photo as it is");
+        assert!(scan_preview(path.clone(), 0, vec![0.0; 3], options.clone(), 100).is_err());
+        let crossed = vec![0.0, 0.0, 1.0, 1.0, 1.0, 0.0, 0.0, 1.0];
+        assert!(scan_preview(path, 0, crossed, options, 100).is_err());
+        let _ = std::fs::remove_dir_all(&folder);
+    }
+
+    #[test]
     fn photos_become_one_improved_pdf() {
         let folder = std::env::temp_dir().join(format!("aktujo-bridge-scan-{}", std::process::id()));
         let _ = std::fs::remove_dir_all(&folder);
@@ -1266,15 +1358,19 @@ mod tests {
             crop_top: 0.0,
             crop_right: 0.05,
             crop_bottom: 0.0,
+            corners: vec![],
         };
 
-        let preview = scan_preview(paths[1].clone(), 1, options.clone(), 200).unwrap();
+        let preview = scan_preview(paths[1].clone(), 1, vec![], options.clone(), 200).unwrap();
         let shown = image::load_from_memory(&preview).unwrap();
         assert_eq!(shown.width(), 200);
         assert!(shown.height() < 200, "turned: the page lies on its side");
-        assert!(scan_preview(paths[0].clone(), 0, ScanOptions { crop_top: 0.6, ..options.clone() }, 200).is_err());
         assert!(
-            scan_preview(folder.join("nothing.txt").to_string_lossy().into_owned(), 0, options.clone(), 200).is_err()
+            scan_preview(paths[0].clone(), 0, vec![], ScanOptions { crop_top: 0.6, ..options.clone() }, 200).is_err()
+        );
+        assert!(
+            scan_preview(folder.join("nothing.txt").to_string_lossy().into_owned(), 0, vec![], options.clone(), 200)
+                .is_err()
         );
 
         let id = archive.add_scan(space.clone(), paths, " Letter ".into(), options).unwrap();

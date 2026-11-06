@@ -9,9 +9,10 @@ import 'package:image_picker/image_picker.dart';
 
 import '../l10n/app_localizations.dart';
 import '../src/rust/api/archive.dart';
+import 'corners_page.dart';
 
-/// A scan: pages photographed or chosen, each shown as it will be – turned, straightened, trimmed, grey or black and
-/// white – and saved as one PDF. Pops with the new document's identity.
+/// A scan: pages photographed or chosen, each shown as it will be – the sheet found and its perspective corrected (its
+/// corners can be moved), turned, straightened, trimmed, grey or black and white – and saved as one PDF. Pops with the new document's identity.
 class ScanPage extends StatefulWidget {
   const ScanPage({super.key, required this.archive, required this.space, this.pickImages});
 
@@ -31,12 +32,16 @@ class _Page {
   final String path;
   int turn = 0;
   Uint8List? preview;
+
+  /// The corners of the sheet – found, or moved by hand; none: the whole photo.
+  List<double>? corners;
 }
 
 class _ScanPageState extends State<ScanPage> {
   final List<_Page> _pages = [];
   final _title = TextEditingController();
   bool _deskew = true;
+  bool _findSheet = true;
   String _colour = 'black_white';
   double _trim = 0;
   bool _busy = false;
@@ -54,7 +59,11 @@ class _ScanPageState extends State<ScanPage> {
     super.dispose();
   }
 
-  ScanOptions _options(List<int> turns) => ScanOptions(
+  /// The corners a page is cut along: its own, if the sheet is to be found.
+  Float32List _cornersOf(_Page page) =>
+      Float32List.fromList(_findSheet && page.corners != null ? page.corners! : const []);
+
+  ScanOptions _options(List<int> turns, [List<Float32List> corners = const []]) => ScanOptions(
     deskew: _deskew,
     colour: _colour,
     turns: Uint8List.fromList(turns),
@@ -62,6 +71,7 @@ class _ScanPageState extends State<ScanPage> {
     cropTop: _trim,
     cropRight: _trim,
     cropBottom: _trim,
+    corners: corners,
   );
 
   /// Renders every page anew, after a pause; an older round that is still running is left behind.
@@ -71,7 +81,13 @@ class _ScanPageState extends State<ScanPage> {
       final generation = ++_generation;
       for (final page in List.of(_pages)) {
         try {
-          final png = await scanPreview(path: page.path, turn: page.turn, options: _options([]), width: 600);
+          final png = await scanPreview(
+            path: page.path,
+            turn: page.turn,
+            corners: _cornersOf(page),
+            options: _options([]),
+            width: 600,
+          );
           if (!mounted || generation != _generation) return;
           setState(() => page.preview = png);
         } catch (error) {
@@ -81,15 +97,41 @@ class _ScanPageState extends State<ScanPage> {
     });
   }
 
-  void _add(List<String> paths) {
+  Future<void> _add(List<String> paths) async {
     if (paths.isEmpty) return;
-    setState(() => _pages.addAll(paths.map(_Page.new)));
+    final added = paths.map(_Page.new).toList();
+    setState(() => _pages.addAll(added));
+    // The sheet on each photo, found before it is shown.
+    for (final page in added) {
+      try {
+        final found = await scanCorners(path: page.path);
+        page.corners = found.isEmpty ? null : found.toList();
+      } catch (_) {
+        // Shown as it is; the preview tells what is wrong with it.
+      }
+    }
+    _render();
+  }
+
+  Future<void> _editCorners(_Page page) async {
+    final chosen = await Navigator.push<List<double>>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => CornersPage(path: page.path, corners: page.corners),
+      ),
+    );
+    if (chosen == null || !mounted) return;
+    setState(() {
+      page.corners = chosen.isEmpty ? null : chosen;
+      page.preview = null;
+      if (chosen.isNotEmpty) _findSheet = true;
+    });
     _render();
   }
 
   Future<void> _photo() async {
     final photo = await ImagePicker().pickImage(source: ImageSource.camera, imageQuality: 90);
-    if (photo != null) _add([photo.path]);
+    if (photo != null) await _add([photo.path]);
   }
 
   Future<List<String>> _chooseImages() async {
@@ -103,7 +145,7 @@ class _ScanPageState extends State<ScanPage> {
     return files.map((f) => f.path).toList();
   }
 
-  Future<void> _choose() async => _add(await (widget.pickImages ?? _chooseImages)());
+  Future<void> _choose() async => await _add(await (widget.pickImages ?? _chooseImages)());
 
   void _move(int at, int by) {
     final to = at + by;
@@ -124,7 +166,7 @@ class _ScanPageState extends State<ScanPage> {
         space: widget.space,
         paths: _pages.map((p) => p.path).toList(),
         title: _title.text,
-        options: _options(_pages.map((p) => p.turn).toList()),
+        options: _options(_pages.map((p) => p.turn).toList(), _pages.map(_cornersOf).toList()),
       );
       if (mounted) Navigator.pop(context, id);
     } catch (error) {
@@ -155,6 +197,15 @@ class _ScanPageState extends State<ScanPage> {
             ],
           ),
           const SizedBox(height: 16),
+          SwitchListTile(
+            contentPadding: EdgeInsets.zero,
+            title: Text(l.findSheet),
+            value: _findSheet,
+            onChanged: (on) {
+              setState(() => _findSheet = on);
+              _render();
+            },
+          ),
           SwitchListTile(
             contentPadding: EdgeInsets.zero,
             title: Text(l.straighten),
@@ -201,6 +252,11 @@ class _ScanPageState extends State<ScanPage> {
                     Row(
                       children: [
                         Expanded(child: Text(l.page(i + 1))),
+                        IconButton(
+                          icon: const Icon(Icons.crop_free),
+                          tooltip: l.corners,
+                          onPressed: () => _editCorners(page),
+                        ),
                         IconButton(
                           icon: const Icon(Icons.rotate_right),
                           tooltip: l.turn,

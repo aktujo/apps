@@ -2009,7 +2009,7 @@ abstract class AppLocalizations {
   /// No description provided for @scanHint.
   ///
   /// In en, this message translates to:
-  /// **'Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.'**
+  /// **'Photograph the pages – or choose images – and aktujo makes one PDF of them: the sheet found, straightened, trimmed, in black and white if you like.'**
   String get scanHint;
 
   /// No description provided for @takePhoto.
@@ -2053,6 +2053,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Down'**
   String get moveDown;
+
+  /// No description provided for @findSheet.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the sheet and correct its perspective'**
+  String get findSheet;
+
+  /// No description provided for @corners.
+  ///
+  /// In en, this message translates to:
+  /// **'Corners'**
+  String get corners;
+
+  /// No description provided for @cornersHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag each corner onto a corner of the sheet.'**
+  String get cornersHint;
+
+  /// No description provided for @wholePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Whole photo'**
+  String get wholePhoto;
 
   /// No description provided for @straighten.
   ///
