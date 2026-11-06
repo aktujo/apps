@@ -63,7 +63,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
   String get codegenVersion => '2.13.0';
 
   @override
-  int get rustContentHash => -1240756633;
+  int get rustContentHash => -2142059235;
 
   static const kDefaultExternalLibraryLoaderConfig = ExternalLibraryLoaderConfig(
     stem: 'aktujo_bridge',
@@ -95,6 +95,14 @@ abstract class RustLibApi extends BaseApi {
     required String space,
     required String document,
     required String label,
+  });
+
+  Future<String> crateApiArchiveArchiveAddScan({
+    required Archive that,
+    required String space,
+    required List<String> paths,
+    required String title,
+    required ScanOptions options,
   });
 
   Future<void> crateApiArchiveArchiveAddSource({required Archive that, required String url});
@@ -248,6 +256,13 @@ abstract class RustLibApi extends BaseApi {
     required bool take,
   });
 
+  Future<Uint8List> crateApiArchiveScanPreview({
+    required String path,
+    required int turn,
+    required ScanOptions options,
+    required int width,
+  });
+
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Archive;
 
   RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_Archive;
@@ -370,6 +385,36 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       const TaskConstMeta(debugName: "Archive_add_label", argNames: ["that", "space", "document", "label"]);
 
   @override
+  Future<String> crateApiArchiveArchiveAddScan({
+    required Archive that,
+    required String space,
+    required List<String> paths,
+    required String title,
+    required ScanOptions options,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
+          sse_encode_String(space, serializer);
+          sse_encode_list_String(paths, serializer);
+          sse_encode_String(title, serializer);
+          sse_encode_box_autoadd_scan_options(options, serializer);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5, port: port_);
+        },
+        codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: sse_decode_String),
+        constMeta: kCrateApiArchiveArchiveAddScanConstMeta,
+        argValues: [that, space, paths, title, options],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiArchiveArchiveAddScanConstMeta =>
+      const TaskConstMeta(debugName: "Archive_add_scan", argNames: ["that", "space", "paths", "title", "options"]);
+
+  @override
   Future<void> crateApiArchiveArchiveAddSource({required Archive that, required String url}) {
     return handler.executeNormal(
       NormalTask(
@@ -377,7 +422,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(url, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 5, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveAddSourceConstMeta,
@@ -398,7 +443,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 6, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_catalog_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveCatalogConstMeta,
@@ -424,7 +469,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 7, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveConfirmSuggestionsConstMeta,
@@ -444,7 +489,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 8, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_opt_String, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveDeviceNameConstMeta,
@@ -470,7 +515,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 9, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_document_detail, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveDocumentConstMeta,
@@ -498,7 +543,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(words, serializer);
           sse_encode_bool(bin, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 10, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_document_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveDocumentsConstMeta,
@@ -519,7 +564,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(name, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 11, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveFoundSpaceConstMeta,
@@ -541,7 +586,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
           sse_encode_String(path, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 12, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_u_32, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveImportKindsConstMeta,
@@ -563,7 +608,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
           sse_encode_String(rights, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 13, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveInviteConstMeta,
@@ -585,7 +630,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(invitation, serializer);
           sse_encode_opt_String(name, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 14, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveJoinConstMeta,
@@ -605,7 +650,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         callFfi: () {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 15)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16)!;
         },
         codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: null),
         constMeta: kCrateApiArchiveArchiveKeyConstMeta,
@@ -626,7 +671,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 16, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_kind_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveKindsConstMeta,
@@ -647,7 +692,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 17, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_member_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveMembersConstMeta,
@@ -668,7 +713,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_String(folder, serializer);
           sse_encode_opt_String(key, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 18)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19)!;
         },
         codec: SseCodec(
           decodeSuccessData:
@@ -700,7 +745,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
           sse_encode_u_32(number, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 19, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_prim_u_8_strict, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveOriginalConstMeta,
@@ -730,7 +775,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(code, serializer);
           sse_encode_opt_String(name, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 20, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_sync_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRecoverConstMeta,
@@ -758,7 +803,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(kind, serializer);
           sse_encode_String(key, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 21, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRemoveFieldConstMeta,
@@ -780,7 +825,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
           sse_encode_String(kind, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 22, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRemoveKindConstMeta,
@@ -808,7 +853,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
           sse_encode_String(label, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 23, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRemoveLabelConstMeta,
@@ -834,7 +879,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
           sse_encode_String(member, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 24, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRemoveMemberConstMeta,
@@ -855,7 +900,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(url, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 25, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 26, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRemoveSourceConstMeta,
@@ -883,7 +928,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(kind, serializer);
           sse_encode_String(name, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 26, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 27, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveRenameKindConstMeta,
@@ -904,7 +949,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(name, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 27, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 28, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetDeviceNameConstMeta,
@@ -934,7 +979,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(document, serializer);
           sse_encode_String(key, serializer);
           sse_encode_String(text, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 28, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 29, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetFieldConstMeta,
@@ -962,7 +1007,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
           sse_encode_opt_String(kind, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 29, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 30, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetKindConstMeta,
@@ -983,7 +1028,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(language, serializer);
-          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 30)!;
+          return pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 31)!;
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: null),
         constMeta: kCrateApiArchiveArchiveSetLanguageConstMeta,
@@ -1005,7 +1050,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(url, serializer);
           sse_encode_bool(active, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 31, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 32, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetSourceConstMeta,
@@ -1033,7 +1078,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
           sse_encode_String(title, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 32, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 33, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetTitleConstMeta,
@@ -1061,7 +1106,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(document, serializer);
           sse_encode_bool(trashed, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 33, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 34, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetTrashedConstMeta,
@@ -1091,7 +1136,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(kind, serializer);
           sse_encode_String(word, serializer);
           sse_encode_u_32(weight, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 34, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 35, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_unit, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSetWordConstMeta,
@@ -1111,7 +1156,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 35, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 36, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_source_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSourcesConstMeta,
@@ -1131,7 +1176,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         callFfi: (port_) {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 36, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 37, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_space_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSpacesConstMeta,
@@ -1159,7 +1204,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(space, serializer);
           sse_encode_String(relay, serializer);
           sse_encode_opt_String(name, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 37, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 38, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_String, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveStartSyncConstMeta,
@@ -1180,7 +1225,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           final serializer = SseSerializer(generalizedFrbRustBinding);
           sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive(that, serializer);
           sse_encode_String(space, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 38, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 39, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_sync_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveSyncNowConstMeta,
@@ -1210,7 +1255,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           sse_encode_String(source, serializer);
           sse_encode_String(id, serializer);
           sse_encode_bool(take, serializer);
-          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 39, port: port_);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 40, port: port_);
         },
         codec: SseCodec(decodeSuccessData: sse_decode_list_planned_item, decodeErrorData: sse_decode_String),
         constMeta: kCrateApiArchiveArchiveTakeTemplateConstMeta,
@@ -1222,6 +1267,34 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kCrateApiArchiveArchiveTakeTemplateConstMeta =>
       const TaskConstMeta(debugName: "Archive_take_template", argNames: ["that", "space", "source", "id", "take"]);
+
+  @override
+  Future<Uint8List> crateApiArchiveScanPreview({
+    required String path,
+    required int turn,
+    required ScanOptions options,
+    required int width,
+  }) {
+    return handler.executeNormal(
+      NormalTask(
+        callFfi: (port_) {
+          final serializer = SseSerializer(generalizedFrbRustBinding);
+          sse_encode_String(path, serializer);
+          sse_encode_u_8(turn, serializer);
+          sse_encode_box_autoadd_scan_options(options, serializer);
+          sse_encode_u_32(width, serializer);
+          pdeCallFfi(generalizedFrbRustBinding, serializer, funcId: 41, port: port_);
+        },
+        codec: SseCodec(decodeSuccessData: sse_decode_list_prim_u_8_strict, decodeErrorData: sse_decode_String),
+        constMeta: kCrateApiArchiveScanPreviewConstMeta,
+        argValues: [path, turn, options, width],
+        apiImpl: this,
+      ),
+    );
+  }
+
+  TaskConstMeta get kCrateApiArchiveScanPreviewConstMeta =>
+      const TaskConstMeta(debugName: "scan_preview", argNames: ["path", "turn", "options", "width"]);
 
   RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_Archive =>
       wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedRustAutoOpaqueInnerArchive;
@@ -1257,6 +1330,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   bool dco_decode_bool(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     return raw as bool;
+  }
+
+  @protected
+  ScanOptions dco_decode_box_autoadd_scan_options(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return dco_decode_scan_options(raw);
   }
 
   @protected
@@ -1304,6 +1383,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       trashed: dco_decode_bool(arr[7]),
       excerpt: dco_decode_String(arr[8]),
     );
+  }
+
+  @protected
+  double dco_decode_f_32(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    return raw as double;
   }
 
   @protected
@@ -1462,6 +1547,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ScanOptions dco_decode_scan_options(dynamic raw) {
+    // Codec=Dco (DartCObject based), see doc to use other codecs
+    final arr = raw as List<dynamic>;
+    if (arr.length != 7) throw Exception('unexpected arr length: expect 7 but see ${arr.length}');
+    return ScanOptions(
+      deskew: dco_decode_bool(arr[0]),
+      colour: dco_decode_String(arr[1]),
+      turns: dco_decode_list_prim_u_8_strict(arr[2]),
+      cropLeft: dco_decode_f_32(arr[3]),
+      cropTop: dco_decode_f_32(arr[4]),
+      cropRight: dco_decode_f_32(arr[5]),
+      cropBottom: dco_decode_f_32(arr[6]),
+    );
+  }
+
+  @protected
   SourceItem dco_decode_source_item(dynamic raw) {
     // Codec=Dco (DartCObject based), see doc to use other codecs
     final arr = raw as List<dynamic>;
@@ -1609,6 +1710,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ScanOptions sse_decode_box_autoadd_scan_options(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return (sse_decode_scan_options(deserializer));
+  }
+
+  @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     return (sse_decode_u_64(deserializer));
@@ -1664,6 +1771,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       trashed: var_trashed,
       excerpt: var_excerpt,
     );
+  }
+
+  @protected
+  double sse_decode_f_32(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    return deserializer.buffer.getFloat32();
   }
 
   @protected
@@ -1896,6 +2009,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  ScanOptions sse_decode_scan_options(SseDeserializer deserializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    var var_deskew = sse_decode_bool(deserializer);
+    var var_colour = sse_decode_String(deserializer);
+    var var_turns = sse_decode_list_prim_u_8_strict(deserializer);
+    var var_cropLeft = sse_decode_f_32(deserializer);
+    var var_cropTop = sse_decode_f_32(deserializer);
+    var var_cropRight = sse_decode_f_32(deserializer);
+    var var_cropBottom = sse_decode_f_32(deserializer);
+    return ScanOptions(
+      deskew: var_deskew,
+      colour: var_colour,
+      turns: var_turns,
+      cropLeft: var_cropLeft,
+      cropTop: var_cropTop,
+      cropRight: var_cropRight,
+      cropBottom: var_cropBottom,
+    );
+  }
+
+  @protected
   SourceItem sse_decode_source_item(SseDeserializer deserializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     var var_url = sse_decode_String(deserializer);
@@ -2053,6 +2187,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_scan_options(ScanOptions self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_scan_options(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_u_64(self, serializer);
@@ -2088,6 +2228,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.reading, serializer);
     sse_encode_bool(self.trashed, serializer);
     sse_encode_String(self.excerpt, serializer);
+  }
+
+  @protected
+  void sse_encode_f_32(double self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    serializer.buffer.putFloat32(self);
   }
 
   @protected
@@ -2271,6 +2417,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_scan_options(ScanOptions self, SseSerializer serializer) {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    sse_encode_bool(self.deskew, serializer);
+    sse_encode_String(self.colour, serializer);
+    sse_encode_list_prim_u_8_strict(self.turns, serializer);
+    sse_encode_f_32(self.cropLeft, serializer);
+    sse_encode_f_32(self.cropTop, serializer);
+    sse_encode_f_32(self.cropRight, serializer);
+    sse_encode_f_32(self.cropBottom, serializer);
+  }
+
+  @protected
   void sse_encode_source_item(SourceItem self, SseSerializer serializer) {
     // Codec=Sse (Serialization based), see doc to use other codecs
     sse_encode_String(self.url, serializer);
@@ -2405,6 +2563,21 @@ class ArchiveImpl extends RustOpaque implements Archive {
   /// Adds a label.
   Future<void> addLabel({required String space, required String document, required String label}) =>
       RustLib.instance.api.crateApiArchiveArchiveAddLabel(that: this, space: space, document: document, label: label);
+
+  /// Adds photos or image files as pages of one new document, a PDF called `title` – each page improved as
+  /// `options` say. Returns the document's identity.
+  Future<String> addScan({
+    required String space,
+    required List<String> paths,
+    required String title,
+    required ScanOptions options,
+  }) => RustLib.instance.api.crateApiArchiveArchiveAddScan(
+    that: this,
+    space: space,
+    paths: paths,
+    title: title,
+    options: options,
+  );
 
   /// Adds a source (HTTPS, or HTTP on this device), switched on.
   Future<void> addSource({required String url}) =>

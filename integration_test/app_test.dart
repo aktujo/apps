@@ -5,11 +5,13 @@
 // (`aktujo relay --data <folder>`) named by `--dart-define=AKTUJO_TEST_RELAY=http://127.0.0.1:8072`, it also starts
 // syncing through it and invites; without one that test does nothing.
 import 'dart:io';
+import 'dart:ui' as ui;
 
 import 'package:aktujo/app/opening.dart';
 import 'package:aktujo/main.dart';
 import 'package:aktujo/pages/home_page.dart';
 import 'package:aktujo/pages/kinds_page.dart';
+import 'package:aktujo/pages/scan_page.dart';
 import 'package:aktujo/src/rust/frb_generated.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -26,6 +28,19 @@ Future<void> waitFor(WidgetTester tester, Finder finder, {Duration timeout = con
 }
 
 const testRelay = String.fromEnvironment('AKTUJO_TEST_RELAY');
+
+/// A photo of a page as a PNG: light paper with dark lines of "text".
+Future<void> writePage(String path) async {
+  final recorder = ui.PictureRecorder();
+  final canvas = Canvas(recorder);
+  canvas.drawRect(const Rect.fromLTWH(0, 0, 300, 400), Paint()..color = const Color(0xFFEBE6DC));
+  for (var y = 30.0; y < 380; y += 24) {
+    canvas.drawRect(Rect.fromLTWH(30, y, 240, 6), Paint()..color = const Color(0xFF1E1E28));
+  }
+  final image = await recorder.endRecording().toImage(300, 400);
+  final png = await image.toByteData(format: ui.ImageByteFormat.png);
+  await File(path).writeAsBytes(png!.buffer.asUint8List());
+}
 
 void main() {
   IntegrationTestWidgetsFlutterBinding.ensureInitialized();
@@ -230,6 +245,69 @@ void main() {
     expect(find.text('1200.50 EUR'), findsOneWidget);
     final detail = await archive.document(space: space, document: document);
     expect(detail.kindId, 'contract');
+
+    await keptKeys.delete(key: keyName);
+    await scratch.delete(recursive: true);
+  });
+
+  testWidgets('pages are scanned into one PDF, shown as they will be', (tester) async {
+    final scratch = await Directory.systemTemp.createTemp('aktujo-app-scan');
+    const keyName = 'aktujo.data-folder.test-scan';
+    await keptKeys.delete(key: keyName);
+    final archive = await openArchive(folder: '${scratch.path}/data', keyName: keyName);
+    final space = await archive.foundSpace(name: 'Home');
+    final pages = ['${scratch.path}/page 1.png', '${scratch.path}/page 2.png'];
+    await tester.runAsync(() async {
+      for (final page in pages) {
+        await writePage(page);
+      }
+    });
+
+    String? saved;
+    await tester.pumpWidget(
+      AktujoApp(
+        locale: const Locale('en'),
+        home: Builder(
+          builder: (context) => Scaffold(
+            body: Center(
+              child: FilledButton(
+                onPressed: () async {
+                  saved = await Navigator.push<String>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => ScanPage(archive: archive, space: space, pickImages: () async => pages),
+                    ),
+                  );
+                },
+                child: const Text('Start'),
+              ),
+            ),
+          ),
+        ),
+      ),
+    );
+    await tester.tap(find.text('Start'));
+    await tester.pumpAndSettle();
+    expect(find.text('No pages yet.'), findsOneWidget);
+    expect(find.text('Take a photo'), findsNothing, reason: 'a computer chooses images');
+    await tester.tap(find.text('grey'));
+    await tester.tap(find.text('Choose images'));
+    await waitFor(tester, find.byType(Image), timeout: const Duration(seconds: 30));
+    await tester.scrollUntilVisible(find.text('Page 1'), 200);
+    expect(find.text('Page 1'), findsOneWidget);
+    await tester.tap(find.byTooltip('Turn').first);
+    await tester.pump(const Duration(milliseconds: 400));
+    await tester.scrollUntilVisible(find.text('Save as a document'), 300);
+    await tester.enterText(find.widgetWithText(TextField, 'Title'), 'Letter');
+    await tester.tap(find.text('Save as a document'));
+    final end = DateTime.now().add(const Duration(seconds: 60));
+    while (saved == null && DateTime.now().isBefore(end)) {
+      await tester.pump(const Duration(milliseconds: 200));
+    }
+    expect(saved, isNotNull);
+    final detail = await archive.document(space: space, document: saved!);
+    expect(detail.item.title, 'Letter');
+    expect(detail.versions.single.mediaType, 'application/pdf');
 
     await keptKeys.delete(key: keyName);
     await scratch.delete(recursive: true);

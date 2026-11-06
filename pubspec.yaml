@@ -21,6 +21,7 @@ dependencies:
   flutter_rust_bridge: 2.13.0
   flutter_secure_storage: 11.2.0
   intl: any
+  image_picker: 1.2.4
   path_provider: 2.1.6
 
 dev_dependencies:
@@ -29,6 +30,10 @@ dev_dependencies:
     sdk: flutter
   integration_test:
     sdk: flutter
+
+# Platform parts set back to their newest versions at least two weeks old (CLAUDE.md, Rules).
+dependency_overrides:
+  image_picker_ios: 0.8.13+13
 
 flutter:
   uses-material-design: true

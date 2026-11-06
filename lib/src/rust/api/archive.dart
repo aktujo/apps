@@ -7,9 +7,18 @@ import '../frb_generated.dart';
 
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
-// These functions are ignored because they are not marked as `pub`: `change_kind`, `changed`, `document_id`, `hex`, `item`, `language`, `lock`, `member_item`, `optional`, `reading_name`, `rights_name`, `rights_of`, `show`, `space_id`, `step_name`, `type_name`, `type_of`, `unhex`, `value_of`
+// These functions are ignored because they are not marked as `pub`: `change_kind`, `changed`, `document_id`, `hex`, `improve`, `item`, `language`, `lock`, `member_item`, `optional`, `reading_name`, `rights_name`, `rights_of`, `scanned`, `show`, `space_id`, `step_name`, `type_name`, `type_of`, `unhex`, `value_of`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `HandedKey`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
+
+/// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, turned `turn` quarters and
+/// improved as `options` say.
+Future<Uint8List> scanPreview({
+  required String path,
+  required int turn,
+  required ScanOptions options,
+  required int width,
+}) => RustLib.instance.api.crateApiArchiveScanPreview(path: path, turn: turn, options: options, width: width);
 
 // Rust type: RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Archive>>
 abstract class Archive implements RustOpaqueInterface {
@@ -24,6 +33,15 @@ abstract class Archive implements RustOpaqueInterface {
 
   /// Adds a label.
   Future<void> addLabel({required String space, required String document, required String label});
+
+  /// Adds photos or image files as pages of one new document, a PDF called `title` – each page improved as
+  /// `options` say. Returns the document's identity.
+  Future<String> addScan({
+    required String space,
+    required List<String> paths,
+    required String title,
+    required ScanOptions options,
+  });
 
   /// Adds a source (HTTPS, or HTTP on this device), switched on.
   Future<void> addSource({required String url});
@@ -398,6 +416,57 @@ class PlannedItem {
           name == other.name &&
           step == other.step &&
           conflicts == other.conflicts;
+}
+
+/// How scanned pages are improved.
+class ScanOptions {
+  /// Straighten each page by the skew of its text.
+  final bool deskew;
+
+  /// `keep`, `grey` or `black_white`.
+  final String colour;
+
+  /// Quarter turns clockwise for each page, by its number from 0 (0 to 3).
+  final Uint8List turns;
+
+  /// What is cut away from each side, as a share of the page (0 to 0.45).
+  final double cropLeft;
+  final double cropTop;
+  final double cropRight;
+  final double cropBottom;
+
+  const ScanOptions({
+    required this.deskew,
+    required this.colour,
+    required this.turns,
+    required this.cropLeft,
+    required this.cropTop,
+    required this.cropRight,
+    required this.cropBottom,
+  });
+
+  @override
+  int get hashCode =>
+      deskew.hashCode ^
+      colour.hashCode ^
+      turns.hashCode ^
+      cropLeft.hashCode ^
+      cropTop.hashCode ^
+      cropRight.hashCode ^
+      cropBottom.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ScanOptions &&
+          runtimeType == other.runtimeType &&
+          deskew == other.deskew &&
+          colour == other.colour &&
+          turns == other.turns &&
+          cropLeft == other.cropLeft &&
+          cropTop == other.cropTop &&
+          cropRight == other.cropRight &&
+          cropBottom == other.cropBottom;
 }
 
 /// A source of templates on this device.

@@ -40,6 +40,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool dco_decode_bool(dynamic raw);
 
   @protected
+  ScanOptions dco_decode_box_autoadd_scan_options(dynamic raw);
+
+  @protected
   BigInt dco_decode_box_autoadd_u_64(dynamic raw);
 
   @protected
@@ -50,6 +53,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DocumentItem dco_decode_document_item(dynamic raw);
+
+  @protected
+  double dco_decode_f_32(dynamic raw);
 
   @protected
   FieldDefItem dco_decode_field_def_item(dynamic raw);
@@ -112,6 +118,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlannedItem dco_decode_planned_item(dynamic raw);
 
   @protected
+  ScanOptions dco_decode_scan_options(dynamic raw);
+
+  @protected
   SourceItem dco_decode_source_item(dynamic raw);
 
   @protected
@@ -166,6 +175,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
+  ScanOptions sse_decode_box_autoadd_scan_options(SseDeserializer deserializer);
+
+  @protected
   BigInt sse_decode_box_autoadd_u_64(SseDeserializer deserializer);
 
   @protected
@@ -176,6 +188,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   DocumentItem sse_decode_document_item(SseDeserializer deserializer);
+
+  @protected
+  double sse_decode_f_32(SseDeserializer deserializer);
 
   @protected
   FieldDefItem sse_decode_field_def_item(SseDeserializer deserializer);
@@ -238,6 +253,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   PlannedItem sse_decode_planned_item(SseDeserializer deserializer);
 
   @protected
+  ScanOptions sse_decode_scan_options(SseDeserializer deserializer);
+
+  @protected
   SourceItem sse_decode_source_item(SseDeserializer deserializer);
 
   @protected
@@ -298,6 +316,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_bool(bool self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_scan_options(ScanOptions self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_u_64(BigInt self, SseSerializer serializer);
 
   @protected
@@ -308,6 +329,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_document_item(DocumentItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_f_32(double self, SseSerializer serializer);
 
   @protected
   void sse_encode_field_def_item(FieldDefItem self, SseSerializer serializer);
@@ -368,6 +392,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_planned_item(PlannedItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_scan_options(ScanOptions self, SseSerializer serializer);
 
   @protected
   void sse_encode_source_item(SourceItem self, SseSerializer serializer);

@@ -781,6 +781,102 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'official'**
   String get official;
+
+  /// No description provided for @scan.
+  ///
+  /// In en, this message translates to:
+  /// **'Scan'**
+  String get scan;
+
+  /// No description provided for @scanHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.'**
+  String get scanHint;
+
+  /// No description provided for @takePhoto.
+  ///
+  /// In en, this message translates to:
+  /// **'Take a photo'**
+  String get takePhoto;
+
+  /// No description provided for @chooseImages.
+  ///
+  /// In en, this message translates to:
+  /// **'Choose images'**
+  String get chooseImages;
+
+  /// No description provided for @noPages.
+  ///
+  /// In en, this message translates to:
+  /// **'No pages yet.'**
+  String get noPages;
+
+  /// No description provided for @page.
+  ///
+  /// In en, this message translates to:
+  /// **'Page {n}'**
+  String page(int n);
+
+  /// No description provided for @turn.
+  ///
+  /// In en, this message translates to:
+  /// **'Turn'**
+  String get turn;
+
+  /// No description provided for @moveUp.
+  ///
+  /// In en, this message translates to:
+  /// **'Up'**
+  String get moveUp;
+
+  /// No description provided for @moveDown.
+  ///
+  /// In en, this message translates to:
+  /// **'Down'**
+  String get moveDown;
+
+  /// No description provided for @straighten.
+  ///
+  /// In en, this message translates to:
+  /// **'Straighten'**
+  String get straighten;
+
+  /// No description provided for @colour.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get colour;
+
+  /// No description provided for @colourKeep.
+  ///
+  /// In en, this message translates to:
+  /// **'as it is'**
+  String get colourKeep;
+
+  /// No description provided for @colourGrey.
+  ///
+  /// In en, this message translates to:
+  /// **'grey'**
+  String get colourGrey;
+
+  /// No description provided for @colourBlackWhite.
+  ///
+  /// In en, this message translates to:
+  /// **'black and white'**
+  String get colourBlackWhite;
+
+  /// No description provided for @trim.
+  ///
+  /// In en, this message translates to:
+  /// **'Trim the edges'**
+  String get trim;
+
+  /// No description provided for @saveScan.
+  ///
+  /// In en, this message translates to:
+  /// **'Save as a document'**
+  String get saveScan;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

@@ -16,6 +16,7 @@ use aktujo_sdk::{
     Reader, Rights, Search, SpaceId, Standing, Step, SyncReport, Syncer, TemplateOrigin, Value, Weighted, Worker,
     Workspace, date_of, fetch_catalog, fetch_template, kind_id, media_type_of, source_url,
 };
+use aktujo_sdk::{Colour, Crop, Improve, VersionFile, combined, preview_png};
 
 /// How often synchronised spaces are synchronised, besides after every change.
 const SYNC_EVERY: Duration = Duration::from_secs(60);
@@ -284,6 +285,61 @@ fn value_of(field_type: FieldType, text: &str) -> Result<Value, String> {
     };
     value.check().map_err(|e| e.to_string())?;
     Ok(value)
+}
+
+/// How scanned pages are improved.
+#[derive(Debug, Clone)]
+pub struct ScanOptions {
+    /// Straighten each page by the skew of its text.
+    pub deskew: bool,
+    /// `keep`, `grey` or `black_white`.
+    pub colour: String,
+    /// Quarter turns clockwise for each page, by its number from 0 (0 to 3).
+    pub turns: Vec<u8>,
+    /// What is cut away from each side, as a share of the page (0 to 0.45).
+    pub crop_left: f32,
+    pub crop_top: f32,
+    pub crop_right: f32,
+    pub crop_bottom: f32,
+}
+
+impl ScanOptions {
+    fn improve(&self, turns: Vec<u8>) -> Result<Improve, String> {
+        let crop = Crop { left: self.crop_left, top: self.crop_top, right: self.crop_right, bottom: self.crop_bottom };
+        let cropped = [crop.left, crop.top, crop.right, crop.bottom];
+        if cropped.iter().any(|share| !(0.0..=0.45).contains(share)) {
+            return Err("a side is cut by 0 to 45 per cent".into());
+        }
+        Ok(Improve {
+            pages: None,
+            turns,
+            deskew: self.deskew,
+            crop: cropped.iter().any(|share| *share > 0.0).then_some(crop),
+            colour: match self.colour.as_str() {
+                "grey" => Colour::Grey,
+                "black_white" => Colour::BlackWhite,
+                "keep" => Colour::Keep,
+                other => return Err(format!("not a colour: {other}")),
+            },
+        })
+    }
+}
+
+/// A photo or an image file as a page to scan.
+fn scanned(path: &str) -> Result<VersionFile, String> {
+    let name = Path::new(path).file_name().and_then(|n| n.to_str()).ok_or("a file without a name")?;
+    let media_type =
+        media_type_of(name).filter(|t| t.starts_with("image/")).ok_or_else(|| format!("{name}: not an image"))?;
+    let bytes = std::fs::read(path).map_err(|e| format!("{name}: {e}"))?;
+    Ok(VersionFile { name: name.to_owned(), media_type: media_type.to_owned(), bytes })
+}
+
+/// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, turned `turn` quarters and
+/// improved as `options` say.
+pub fn scan_preview(path: String, turn: u8, options: ScanOptions, width: u32) -> Result<Vec<u8>, String> {
+    let file = scanned(&path)?;
+    let improve = options.improve(vec![turn])?;
+    preview_png(&file, &improve, 0, width).map_err(|e| e.to_string())
 }
 
 fn step_name(step: Step) -> String {
@@ -570,6 +626,33 @@ impl Archive {
         drop(workspace);
         self.changed();
         Ok(())
+    }
+
+    /// Adds photos or image files as pages of one new document, a PDF called `title` – each page improved as
+    /// `options` say. Returns the document's identity.
+    pub fn add_scan(
+        &self,
+        space: String,
+        paths: Vec<String>,
+        title: String,
+        options: ScanOptions,
+    ) -> Result<String, String> {
+        let space = space_id(&space)?;
+        if paths.is_empty() {
+            return Err("no pages".into());
+        }
+        let files = paths.iter().map(|p| scanned(p)).collect::<Result<Vec<_>, _>>()?;
+        let mut turns = options.turns.clone();
+        turns.resize(files.len(), 0);
+        // Improved without holding the workspace: it takes a while for many pages.
+        let written = combined(&files, &options.improve(turns)?).map_err(|e| e.to_string())?;
+        let title = title.trim();
+        let name = format!("{}.pdf", if title.is_empty() { "Scan" } else { title });
+        let new_file = NewFile { name: &name, media_type: written.media_type, bytes: &written.bytes };
+        let added = self.lock().add_document(&space, new_file).map_err(|e| e.to_string())?;
+        self.worker.wake();
+        self.changed();
+        Ok(added.document.to_string())
     }
 
     // Sync and sharing
@@ -1074,7 +1157,67 @@ mod tests {
         assert_eq!(archive.import_kinds(space.clone(), file.to_string_lossy().into_owned()).unwrap(), 1);
         archive.remove_kind(space.clone(), "receipt".into()).unwrap();
         assert_eq!(archive.kinds(space).unwrap().len(), 2);
-        std::fs::remove_dir_all(&folder).unwrap();
+        // The reader in the background may still write; the folder is temporary anyway.
+        let _ = std::fs::remove_dir_all(&folder);
+    }
+
+    /// A photo of a page: light paper with dark lines of "text", as a PNG.
+    fn photo(path: &Path, width: u32, height: u32) {
+        let mut png = Vec::new();
+        let image = image::RgbImage::from_fn(width, height, |_, y| {
+            if (y / 6) % 4 == 0 { image::Rgb([30, 30, 40]) } else { image::Rgb([235, 230, 220]) }
+        });
+        image.write_to(&mut std::io::Cursor::new(&mut png), image::ImageFormat::Png).unwrap();
+        std::fs::write(path, png).unwrap();
+    }
+
+    #[test]
+    fn photos_become_one_improved_pdf() {
+        let folder = std::env::temp_dir().join(format!("aktujo-bridge-scan-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&folder);
+        std::fs::create_dir_all(&folder).unwrap();
+        let archive = Archive::open(folder.join("data").to_string_lossy().into_owned(), None).unwrap();
+        let space = archive.found_space("Home".into()).unwrap();
+        let (first, second) = (folder.join("page 1.png"), folder.join("page 2.png"));
+        photo(&first, 300, 400);
+        photo(&second, 300, 400);
+        let paths = vec![first.to_string_lossy().into_owned(), second.to_string_lossy().into_owned()];
+        let options = ScanOptions {
+            deskew: true,
+            colour: "black_white".into(),
+            turns: vec![0, 1],
+            crop_left: 0.05,
+            crop_top: 0.0,
+            crop_right: 0.05,
+            crop_bottom: 0.0,
+        };
+
+        let preview = scan_preview(paths[1].clone(), 1, options.clone(), 200).unwrap();
+        let shown = image::load_from_memory(&preview).unwrap();
+        assert_eq!(shown.width(), 200);
+        assert!(shown.height() < 200, "turned: the page lies on its side");
+        assert!(scan_preview(paths[0].clone(), 0, ScanOptions { crop_top: 0.6, ..options.clone() }, 200).is_err());
+        assert!(
+            scan_preview(folder.join("nothing.txt").to_string_lossy().into_owned(), 0, options.clone(), 200).is_err()
+        );
+
+        let id = archive.add_scan(space.clone(), paths, " Letter ".into(), options).unwrap();
+        let detail = archive.document(space.clone(), id.clone()).unwrap();
+        assert_eq!((detail.item.title.as_str(), detail.versions[0].name.as_str()), ("Letter", "Letter.pdf"));
+        assert_eq!(detail.versions[0].media_type, "application/pdf");
+        let pdf = archive.original(space, id, 1).unwrap();
+        assert!(pdf.starts_with(b"%PDF-"));
+        assert_eq!(
+            aktujo_sdk::page_count(&VersionFile {
+                name: "x.pdf".into(),
+                media_type: "application/pdf".into(),
+                bytes: pdf
+            })
+            .unwrap(),
+            2
+        );
+        // The reader in the background may still write; the folder is temporary anyway.
+        let _ = std::fs::remove_dir_all(&folder);
     }
 
     #[test]
@@ -1119,7 +1262,8 @@ mod tests {
         assert_eq!(phone_member.rights, "write");
         assert!(members.iter().any(|m| m.role == "recovery"));
         assert_eq!(laptop.remove_member(space, phone_member.id.clone()).unwrap(), "Phone");
-        std::fs::remove_dir_all(&folder).unwrap();
+        // The reader in the background may still write; the folder is temporary anyway.
+        let _ = std::fs::remove_dir_all(&folder);
     }
 
     #[test]
@@ -1152,6 +1296,7 @@ mod tests {
         assert_eq!(again.spaces().unwrap()[0].trashed, 1);
         let detail = again.document(space, id).unwrap();
         assert_eq!((detail.item.labels.as_slice(), detail.versions.len()), (&["Flat".to_owned()][..], 1));
-        std::fs::remove_dir_all(&folder).unwrap();
+        // The reader in the background may still write; the folder is temporary anyway.
+        let _ = std::fs::remove_dir_all(&folder);
     }
 }

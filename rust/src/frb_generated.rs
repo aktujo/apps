@@ -40,7 +40,7 @@ flutter_rust_bridge::frb_generated_boilerplate!(
     default_rust_auto_opaque = RustAutoOpaqueMoi,
 );
 pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_VERSION: &str = "2.13.0";
-pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -1240756633;
+pub(crate) const FLUTTER_RUST_BRIDGE_CODEGEN_CONTENT_HASH: i32 = -2142059235;
 
 // Section: executor
 
@@ -228,6 +228,58 @@ fn wire__crate__api__archive__Archive_add_label_impl(
                     let api_that_guard = api_that_guard.unwrap();
                     let output_ok =
                         crate::api::archive::Archive::add_label(&*api_that_guard, api_space, api_document, api_label)?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
+fn wire__crate__api__archive__Archive_add_scan_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "Archive_add_scan",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_)
+            };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_that =
+                <RustOpaqueMoi<flutter_rust_bridge::for_generated::RustAutoOpaqueInner<Archive>>>::sse_decode(
+                    &mut deserializer,
+                );
+            let api_space = <String>::sse_decode(&mut deserializer);
+            let api_paths = <Vec<String>>::sse_decode(&mut deserializer);
+            let api_title = <String>::sse_decode(&mut deserializer);
+            let api_options = <crate::api::archive::ScanOptions>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, String>((move || {
+                    let mut api_that_guard = None;
+                    let decode_indices_ = flutter_rust_bridge::for_generated::lockable_compute_decode_order(vec![
+                        flutter_rust_bridge::for_generated::LockableOrderInfo::new(&api_that, 0, false),
+                    ]);
+                    for i in decode_indices_ {
+                        match i {
+                            0 => api_that_guard = Some(api_that.lockable_decode_sync_ref()),
+                            _ => unreachable!(),
+                        }
+                    }
+                    let api_that_guard = api_that_guard.unwrap();
+                    let output_ok = crate::api::archive::Archive::add_scan(
+                        &*api_that_guard,
+                        api_space,
+                        api_paths,
+                        api_title,
+                        api_options,
+                    )?;
                     std::result::Result::Ok(output_ok)
                 })())
             }
@@ -1795,6 +1847,37 @@ fn wire__crate__api__archive__Archive_take_template_impl(
         },
     )
 }
+fn wire__crate__api__archive__scan_preview_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    ptr_: flutter_rust_bridge::for_generated::PlatformGeneralizedUint8ListPtr,
+    rust_vec_len_: i32,
+    data_len_: i32,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::SseCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "scan_preview",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let message = unsafe {
+                flutter_rust_bridge::for_generated::Dart2RustMessageSse::from_wire(ptr_, rust_vec_len_, data_len_)
+            };
+            let mut deserializer = flutter_rust_bridge::for_generated::SseDeserializer::new(message);
+            let api_path = <String>::sse_decode(&mut deserializer);
+            let api_turn = <u8>::sse_decode(&mut deserializer);
+            let api_options = <crate::api::archive::ScanOptions>::sse_decode(&mut deserializer);
+            let api_width = <u32>::sse_decode(&mut deserializer);
+            deserializer.end();
+            move |context| {
+                transform_result_sse::<_, String>((move || {
+                    let output_ok = crate::api::archive::scan_preview(api_path, api_turn, api_options, api_width)?;
+                    std::result::Result::Ok(output_ok)
+                })())
+            }
+        },
+    )
+}
 
 // Section: related_funcs
 
@@ -1888,6 +1971,13 @@ impl SseDecode for crate::api::archive::DocumentItem {
             trashed: var_trashed,
             excerpt: var_excerpt,
         };
+    }
+}
+
+impl SseDecode for f32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_f32::<NativeEndian>().unwrap()
     }
 }
 
@@ -2135,6 +2225,28 @@ impl SseDecode for crate::api::archive::PlannedItem {
     }
 }
 
+impl SseDecode for crate::api::archive::ScanOptions {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_deskew = <bool>::sse_decode(deserializer);
+        let mut var_colour = <String>::sse_decode(deserializer);
+        let mut var_turns = <Vec<u8>>::sse_decode(deserializer);
+        let mut var_cropLeft = <f32>::sse_decode(deserializer);
+        let mut var_cropTop = <f32>::sse_decode(deserializer);
+        let mut var_cropRight = <f32>::sse_decode(deserializer);
+        let mut var_cropBottom = <f32>::sse_decode(deserializer);
+        return crate::api::archive::ScanOptions {
+            deskew: var_deskew,
+            colour: var_colour,
+            turns: var_turns,
+            crop_left: var_cropLeft,
+            crop_top: var_cropTop,
+            crop_right: var_cropRight,
+            crop_bottom: var_cropBottom,
+        };
+    }
+}
+
 impl SseDecode for crate::api::archive::SourceItem {
     // Codec=Sse (Serialization based), see doc to use other codecs
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -2287,38 +2399,40 @@ fn pde_ffi_dispatcher_primary_impl(
         2 => wire__crate__api__archive__Archive_add_files_impl(port, ptr, rust_vec_len, data_len),
         3 => wire__crate__api__archive__Archive_add_kind_impl(port, ptr, rust_vec_len, data_len),
         4 => wire__crate__api__archive__Archive_add_label_impl(port, ptr, rust_vec_len, data_len),
-        5 => wire__crate__api__archive__Archive_add_source_impl(port, ptr, rust_vec_len, data_len),
-        6 => wire__crate__api__archive__Archive_catalog_impl(port, ptr, rust_vec_len, data_len),
-        7 => wire__crate__api__archive__Archive_confirm_suggestions_impl(port, ptr, rust_vec_len, data_len),
-        8 => wire__crate__api__archive__Archive_device_name_impl(port, ptr, rust_vec_len, data_len),
-        9 => wire__crate__api__archive__Archive_document_impl(port, ptr, rust_vec_len, data_len),
-        10 => wire__crate__api__archive__Archive_documents_impl(port, ptr, rust_vec_len, data_len),
-        11 => wire__crate__api__archive__Archive_found_space_impl(port, ptr, rust_vec_len, data_len),
-        12 => wire__crate__api__archive__Archive_import_kinds_impl(port, ptr, rust_vec_len, data_len),
-        13 => wire__crate__api__archive__Archive_invite_impl(port, ptr, rust_vec_len, data_len),
-        14 => wire__crate__api__archive__Archive_join_impl(port, ptr, rust_vec_len, data_len),
-        16 => wire__crate__api__archive__Archive_kinds_impl(port, ptr, rust_vec_len, data_len),
-        17 => wire__crate__api__archive__Archive_members_impl(port, ptr, rust_vec_len, data_len),
-        19 => wire__crate__api__archive__Archive_original_impl(port, ptr, rust_vec_len, data_len),
-        20 => wire__crate__api__archive__Archive_recover_impl(port, ptr, rust_vec_len, data_len),
-        21 => wire__crate__api__archive__Archive_remove_field_impl(port, ptr, rust_vec_len, data_len),
-        22 => wire__crate__api__archive__Archive_remove_kind_impl(port, ptr, rust_vec_len, data_len),
-        23 => wire__crate__api__archive__Archive_remove_label_impl(port, ptr, rust_vec_len, data_len),
-        24 => wire__crate__api__archive__Archive_remove_member_impl(port, ptr, rust_vec_len, data_len),
-        25 => wire__crate__api__archive__Archive_remove_source_impl(port, ptr, rust_vec_len, data_len),
-        26 => wire__crate__api__archive__Archive_rename_kind_impl(port, ptr, rust_vec_len, data_len),
-        27 => wire__crate__api__archive__Archive_set_device_name_impl(port, ptr, rust_vec_len, data_len),
-        28 => wire__crate__api__archive__Archive_set_field_impl(port, ptr, rust_vec_len, data_len),
-        29 => wire__crate__api__archive__Archive_set_kind_impl(port, ptr, rust_vec_len, data_len),
-        31 => wire__crate__api__archive__Archive_set_source_impl(port, ptr, rust_vec_len, data_len),
-        32 => wire__crate__api__archive__Archive_set_title_impl(port, ptr, rust_vec_len, data_len),
-        33 => wire__crate__api__archive__Archive_set_trashed_impl(port, ptr, rust_vec_len, data_len),
-        34 => wire__crate__api__archive__Archive_set_word_impl(port, ptr, rust_vec_len, data_len),
-        35 => wire__crate__api__archive__Archive_sources_impl(port, ptr, rust_vec_len, data_len),
-        36 => wire__crate__api__archive__Archive_spaces_impl(port, ptr, rust_vec_len, data_len),
-        37 => wire__crate__api__archive__Archive_start_sync_impl(port, ptr, rust_vec_len, data_len),
-        38 => wire__crate__api__archive__Archive_sync_now_impl(port, ptr, rust_vec_len, data_len),
-        39 => wire__crate__api__archive__Archive_take_template_impl(port, ptr, rust_vec_len, data_len),
+        5 => wire__crate__api__archive__Archive_add_scan_impl(port, ptr, rust_vec_len, data_len),
+        6 => wire__crate__api__archive__Archive_add_source_impl(port, ptr, rust_vec_len, data_len),
+        7 => wire__crate__api__archive__Archive_catalog_impl(port, ptr, rust_vec_len, data_len),
+        8 => wire__crate__api__archive__Archive_confirm_suggestions_impl(port, ptr, rust_vec_len, data_len),
+        9 => wire__crate__api__archive__Archive_device_name_impl(port, ptr, rust_vec_len, data_len),
+        10 => wire__crate__api__archive__Archive_document_impl(port, ptr, rust_vec_len, data_len),
+        11 => wire__crate__api__archive__Archive_documents_impl(port, ptr, rust_vec_len, data_len),
+        12 => wire__crate__api__archive__Archive_found_space_impl(port, ptr, rust_vec_len, data_len),
+        13 => wire__crate__api__archive__Archive_import_kinds_impl(port, ptr, rust_vec_len, data_len),
+        14 => wire__crate__api__archive__Archive_invite_impl(port, ptr, rust_vec_len, data_len),
+        15 => wire__crate__api__archive__Archive_join_impl(port, ptr, rust_vec_len, data_len),
+        17 => wire__crate__api__archive__Archive_kinds_impl(port, ptr, rust_vec_len, data_len),
+        18 => wire__crate__api__archive__Archive_members_impl(port, ptr, rust_vec_len, data_len),
+        20 => wire__crate__api__archive__Archive_original_impl(port, ptr, rust_vec_len, data_len),
+        21 => wire__crate__api__archive__Archive_recover_impl(port, ptr, rust_vec_len, data_len),
+        22 => wire__crate__api__archive__Archive_remove_field_impl(port, ptr, rust_vec_len, data_len),
+        23 => wire__crate__api__archive__Archive_remove_kind_impl(port, ptr, rust_vec_len, data_len),
+        24 => wire__crate__api__archive__Archive_remove_label_impl(port, ptr, rust_vec_len, data_len),
+        25 => wire__crate__api__archive__Archive_remove_member_impl(port, ptr, rust_vec_len, data_len),
+        26 => wire__crate__api__archive__Archive_remove_source_impl(port, ptr, rust_vec_len, data_len),
+        27 => wire__crate__api__archive__Archive_rename_kind_impl(port, ptr, rust_vec_len, data_len),
+        28 => wire__crate__api__archive__Archive_set_device_name_impl(port, ptr, rust_vec_len, data_len),
+        29 => wire__crate__api__archive__Archive_set_field_impl(port, ptr, rust_vec_len, data_len),
+        30 => wire__crate__api__archive__Archive_set_kind_impl(port, ptr, rust_vec_len, data_len),
+        32 => wire__crate__api__archive__Archive_set_source_impl(port, ptr, rust_vec_len, data_len),
+        33 => wire__crate__api__archive__Archive_set_title_impl(port, ptr, rust_vec_len, data_len),
+        34 => wire__crate__api__archive__Archive_set_trashed_impl(port, ptr, rust_vec_len, data_len),
+        35 => wire__crate__api__archive__Archive_set_word_impl(port, ptr, rust_vec_len, data_len),
+        36 => wire__crate__api__archive__Archive_sources_impl(port, ptr, rust_vec_len, data_len),
+        37 => wire__crate__api__archive__Archive_spaces_impl(port, ptr, rust_vec_len, data_len),
+        38 => wire__crate__api__archive__Archive_start_sync_impl(port, ptr, rust_vec_len, data_len),
+        39 => wire__crate__api__archive__Archive_sync_now_impl(port, ptr, rust_vec_len, data_len),
+        40 => wire__crate__api__archive__Archive_take_template_impl(port, ptr, rust_vec_len, data_len),
+        41 => wire__crate__api__archive__scan_preview_impl(port, ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2331,9 +2445,9 @@ fn pde_ffi_dispatcher_sync_impl(
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartSse {
     // Codec=Pde (Serialization + dispatch), see doc to use other codecs
     match func_id {
-        15 => wire__crate__api__archive__Archive_key_impl(ptr, rust_vec_len, data_len),
-        18 => wire__crate__api__archive__Archive_open_impl(ptr, rust_vec_len, data_len),
-        30 => wire__crate__api__archive__Archive_set_language_impl(ptr, rust_vec_len, data_len),
+        16 => wire__crate__api__archive__Archive_key_impl(ptr, rust_vec_len, data_len),
+        19 => wire__crate__api__archive__Archive_open_impl(ptr, rust_vec_len, data_len),
+        31 => wire__crate__api__archive__Archive_set_language_impl(ptr, rust_vec_len, data_len),
         _ => unreachable!(),
     }
 }
@@ -2496,6 +2610,27 @@ impl flutter_rust_bridge::IntoDart for crate::api::archive::PlannedItem {
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::archive::PlannedItem {}
 impl flutter_rust_bridge::IntoIntoDart<crate::api::archive::PlannedItem> for crate::api::archive::PlannedItem {
     fn into_into_dart(self) -> crate::api::archive::PlannedItem {
+        self
+    }
+}
+// Codec=Dco (DartCObject based), see doc to use other codecs
+impl flutter_rust_bridge::IntoDart for crate::api::archive::ScanOptions {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [
+            self.deskew.into_into_dart().into_dart(),
+            self.colour.into_into_dart().into_dart(),
+            self.turns.into_into_dart().into_dart(),
+            self.crop_left.into_into_dart().into_dart(),
+            self.crop_top.into_into_dart().into_dart(),
+            self.crop_right.into_into_dart().into_dart(),
+            self.crop_bottom.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::archive::ScanOptions {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::archive::ScanOptions> for crate::api::archive::ScanOptions {
+    fn into_into_dart(self) -> crate::api::archive::ScanOptions {
         self
     }
 }
@@ -2674,6 +2809,13 @@ impl SseEncode for crate::api::archive::DocumentItem {
         <String>::sse_encode(self.reading, serializer);
         <bool>::sse_encode(self.trashed, serializer);
         <String>::sse_encode(self.excerpt, serializer);
+    }
+}
+
+impl SseEncode for f32 {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_f32::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -2874,6 +3016,19 @@ impl SseEncode for crate::api::archive::PlannedItem {
         <String>::sse_encode(self.name, serializer);
         <String>::sse_encode(self.step, serializer);
         <Vec<String>>::sse_encode(self.conflicts, serializer);
+    }
+}
+
+impl SseEncode for crate::api::archive::ScanOptions {
+    // Codec=Sse (Serialization based), see doc to use other codecs
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.deskew, serializer);
+        <String>::sse_encode(self.colour, serializer);
+        <Vec<u8>>::sse_encode(self.turns, serializer);
+        <f32>::sse_encode(self.crop_left, serializer);
+        <f32>::sse_encode(self.crop_top, serializer);
+        <f32>::sse_encode(self.crop_right, serializer);
+        <f32>::sse_encode(self.crop_bottom, serializer);
     }
 }
 

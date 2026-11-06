@@ -375,4 +375,55 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get official => 'official';
+
+  @override
+  String get scan => 'Scan';
+
+  @override
+  String get scanHint =>
+      'Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.';
+
+  @override
+  String get takePhoto => 'Take a photo';
+
+  @override
+  String get chooseImages => 'Choose images';
+
+  @override
+  String get noPages => 'No pages yet.';
+
+  @override
+  String page(int n) {
+    return 'Page $n';
+  }
+
+  @override
+  String get turn => 'Turn';
+
+  @override
+  String get moveUp => 'Up';
+
+  @override
+  String get moveDown => 'Down';
+
+  @override
+  String get straighten => 'Straighten';
+
+  @override
+  String get colour => 'Colour';
+
+  @override
+  String get colourKeep => 'as it is';
+
+  @override
+  String get colourGrey => 'grey';
+
+  @override
+  String get colourBlackWhite => 'black and white';
+
+  @override
+  String get trim => 'Trim the edges';
+
+  @override
+  String get saveScan => 'Save as a document';
 }

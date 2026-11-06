@@ -27,6 +27,8 @@ flutter_rust_bridge = "=2.13.0"
 aktujo-crypt = "=0.3.0"
 aktujo-relay = "=0.3.0"
 tokio = { version = "=1.54.1", features = ["rt-multi-thread", "net"] }
+# Photos for the test of scanning, as aktujo-scan reads them.
+image = { version = "=0.25.10", default-features = false, features = ["png"] }
 
 [lints.rust]
 unexpected_cfgs = { level = "warn", check-cfg = ['cfg(frb_expand)'] }

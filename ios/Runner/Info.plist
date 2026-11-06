@@ -2,6 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>NSCameraUsageDescription</key>
+	<string>aktujo photographs the pages you scan; the photos stay on your device.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>aktujo takes images you choose as pages of a scan.</string>
 	<key>NSLocalNetworkUsageDescription</key>
 	<string>aktujo syncs your spaces with a relay you run, also in your home network.</string>
 	<key>CADisableMinimumFrameDurationOnPhone</key>

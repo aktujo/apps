@@ -377,4 +377,55 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get official => 'offiziell';
+
+  @override
+  String get scan => 'Scannen';
+
+  @override
+  String get scanHint =>
+      'Fotografiere die Seiten – oder wähle Bilder – und aktujo macht ein PDF daraus: gerade gerückt, beschnitten, auf Wunsch schwarzweiß.';
+
+  @override
+  String get takePhoto => 'Foto aufnehmen';
+
+  @override
+  String get chooseImages => 'Bilder wählen';
+
+  @override
+  String get noPages => 'Noch keine Seiten.';
+
+  @override
+  String page(int n) {
+    return 'Seite $n';
+  }
+
+  @override
+  String get turn => 'Drehen';
+
+  @override
+  String get moveUp => 'Hoch';
+
+  @override
+  String get moveDown => 'Runter';
+
+  @override
+  String get straighten => 'Gerade rücken';
+
+  @override
+  String get colour => 'Farbe';
+
+  @override
+  String get colourKeep => 'wie sie ist';
+
+  @override
+  String get colourGrey => 'grau';
+
+  @override
+  String get colourBlackWhite => 'schwarzweiß';
+
+  @override
+  String get trim => 'Ränder beschneiden';
+
+  @override
+  String get saveScan => 'Als Dokument speichern';
 }

@@ -114,5 +114,21 @@
   "sourcesHint": "Kataloge, aus denen dieses Gerät Vorlagen liest. Der offizielle lässt sich ausschalten.",
   "addSource": "Quelle hinzufügen",
   "sourceAddress": "Adresse (https://…)",
-  "official": "offiziell"
+  "official": "offiziell",
+  "scan": "Scannen",
+  "scanHint": "Fotografiere die Seiten – oder wähle Bilder – und aktujo macht ein PDF daraus: gerade gerückt, beschnitten, auf Wunsch schwarzweiß.",
+  "takePhoto": "Foto aufnehmen",
+  "chooseImages": "Bilder wählen",
+  "noPages": "Noch keine Seiten.",
+  "page": "Seite {n}",
+  "turn": "Drehen",
+  "moveUp": "Hoch",
+  "moveDown": "Runter",
+  "straighten": "Gerade rücken",
+  "colour": "Farbe",
+  "colourKeep": "wie sie ist",
+  "colourGrey": "grau",
+  "colourBlackWhite": "schwarzweiß",
+  "trim": "Ränder beschneiden",
+  "saveScan": "Als Dokument speichern"
 }

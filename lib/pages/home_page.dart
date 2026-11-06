@@ -9,6 +9,7 @@ import '../src/rust/api/archive.dart';
 import 'document_page.dart';
 import 'join_page.dart';
 import 'kinds_page.dart';
+import 'scan_page.dart';
 import 'sync_page.dart';
 
 /// The archive: its spaces, the documents of the chosen one, search, adding files and the bin.
@@ -100,6 +101,27 @@ class _HomePageState extends State<HomePage> {
     _space = space;
     if (mounted) setState(() => _message = AppLocalizations.of(context).joining);
     await _load();
+  }
+
+  Future<void> _scan() async {
+    final space = _space;
+    if (space == null) return;
+    final id = await Navigator.push<String>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => ScanPage(archive: _archive, space: space),
+      ),
+    );
+    await _load();
+    if (id != null && mounted) {
+      await Navigator.push(
+        context,
+        MaterialPageRoute<void>(
+          builder: (_) => DocumentPage(archive: _archive, space: space, document: id),
+        ),
+      );
+      await _load();
+    }
   }
 
   Future<void> _openKinds() async {
@@ -267,7 +289,25 @@ class _HomePageState extends State<HomePage> {
       drawer: wide ? null : Drawer(child: SafeArea(child: spaces)),
       floatingActionButton: _space == null
           ? null
-          : FloatingActionButton.extended(onPressed: _addFiles, icon: const Icon(Icons.add), label: Text(l.addFiles)),
+          : Column(
+              mainAxisSize: MainAxisSize.min,
+              crossAxisAlignment: CrossAxisAlignment.end,
+              children: [
+                FloatingActionButton.small(
+                  heroTag: 'scan',
+                  tooltip: l.scan,
+                  onPressed: _scan,
+                  child: const Icon(Icons.document_scanner),
+                ),
+                const SizedBox(height: 12),
+                FloatingActionButton.extended(
+                  heroTag: 'add',
+                  onPressed: _addFiles,
+                  icon: const Icon(Icons.add),
+                  label: Text(l.addFiles),
+                ),
+              ],
+            ),
       body: wide
           ? Row(
               children: [

@@ -12,7 +12,8 @@ aktujo is at its beginning: the apps keep an archive on the device – its space
 spaces through a relay you run yourself (`aktujo relay`): invitations with rights, joining, members, the recovery code.
 Kinds of documents are the space's own – made in the app, imported from a file or taken from a catalog of templates
 (the official one, [aktujo/catalog](https://github.com/aktujo/catalog), and others) – with their fields, confirmed
-or suggested. Their page will be
+or suggested. Paper is scanned with the camera – or from images – into one PDF: turned, straightened, trimmed, grey or
+black and white (`aktujo-scan`); OPEN: finding the edges of a page and its perspective. Their page will be
 [aktujo.app](https://aktujo.app); until then the website is [aktujo.org](https://aktujo.org).
 
 ## Layout

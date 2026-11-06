@@ -180,5 +180,28 @@
   "sourcesHint": "Catalogs this device reads templates from. The official one can be switched off.",
   "addSource": "Add a source",
   "sourceAddress": "Address (https://…)",
-  "official": "official"
+  "official": "official",
+  "scan": "Scan",
+  "scanHint": "Photograph the pages – or choose images – and aktujo makes one PDF of them: straightened, trimmed, in black and white if you like.",
+  "takePhoto": "Take a photo",
+  "chooseImages": "Choose images",
+  "noPages": "No pages yet.",
+  "page": "Page {n}",
+  "@page": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "turn": "Turn",
+  "moveUp": "Up",
+  "moveDown": "Down",
+  "straighten": "Straighten",
+  "colour": "Colour",
+  "colourKeep": "as it is",
+  "colourGrey": "grey",
+  "colourBlackWhite": "black and white",
+  "trim": "Trim the edges",
+  "saveScan": "Save as a document"
 }
