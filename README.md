@@ -13,7 +13,8 @@ spaces through a relay you run yourself (`aktujo relay`): invitations with right
 Kinds of documents are the space's own – made in the app, imported from a file or taken from a catalog of templates
 (the official one, [aktujo/catalog](https://github.com/aktujo/catalog), and others) – with their fields, confirmed
 or suggested. Paper is scanned with the camera – or from images – into one PDF: turned, straightened, trimmed, grey or
-black and white (`aktujo-scan`); OPEN: finding the edges of a page and its perspective. Their page will be
+black and white (`aktujo-scan`); OPEN: finding the edges of a page and its perspective. A space is exported as a ZIP – saved on a computer,
+shared from a phone – and read back in as a new space. Their page will be
 [aktujo.app](https://aktujo.app); until then the website is [aktujo.org](https://aktujo.org).
 
 ## Layout

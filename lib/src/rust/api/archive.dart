@@ -9,7 +9,7 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 
 // These functions are ignored because they are not marked as `pub`: `change_kind`, `changed`, `document_id`, `hex`, `improve`, `item`, `language`, `lock`, `member_item`, `optional`, `reading_name`, `rights_name`, `rights_of`, `scanned`, `show`, `space_id`, `step_name`, `type_name`, `type_of`, `unhex`, `value_of`
 // These types are ignored because they are neither used by any `pub` functions nor (for structs and enums) marked `#[frb(unignore)]`: `HandedKey`
-// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
+// These function are ignored because they are on traits that is not defined in current crate (put an empty `#[frb]` on it to unignore): `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `clone`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `fmt`, `from`, `get`, `set`
 
 /// A page of a scan as it will be, as PNG `width` pixels wide: the photo at `path`, turned `turn` quarters and
 /// improved as `options` say.
@@ -61,11 +61,23 @@ abstract class Archive implements RustOpaqueInterface {
   /// The documents found by `words` (all, without words) in a space, or in the bin of it – the newest first.
   Future<List<DocumentItem>> documents({required String space, required String words, required bool bin});
 
+  /// The name an export of a space gets: `aktujo <space> <day>.zip`.
+  Future<String> exportFileName({required String space});
+
+  /// Exports a space as a ZIP to `path` – every document with its versions, what was read, the state as JSON and
+  /// the events; readable without aktujo and **not encrypted**. A file that is there is not overwritten.
+  Future<ExportItem> exportSpace({required String space, required String path});
+
   /// Founds a space; returns its identity.
   Future<String> foundSpace({required String name});
 
   /// Takes over a file of kinds – a template, an export of a space, a list of kinds; returns how many changed.
   Future<int> importKinds({required String space, required String path});
+
+  /// Reads an export – a ZIP aktujo wrote – back in as a new space named `name` (or as the exported one was): the
+  /// kinds, documents with their versions, titles, confirmed kinds and fields, labels and the bin. Its history starts
+  /// now; the text is read again.
+  Future<ImportItem> importSpace({required String path, String? name});
 
   /// An invitation for another device – the person's own or someone else's – with `rights` (`read`, `write`,
   /// `manage`), good for a day.
@@ -279,6 +291,28 @@ class DocumentItem {
           excerpt == other.excerpt;
 }
 
+/// What an export wrote.
+class ExportItem {
+  /// The documents, in the bin or not.
+  final int documents;
+
+  /// Originals whose bytes are not on this device (yet) – their files are missing.
+  final int missing;
+
+  const ExportItem({required this.documents, required this.missing});
+
+  @override
+  int get hashCode => documents.hashCode ^ missing.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ExportItem &&
+          runtimeType == other.runtimeType &&
+          documents == other.documents &&
+          missing == other.missing;
+}
+
 /// A field of a kind.
 class FieldDefItem {
   final String key;
@@ -335,6 +369,42 @@ class FieldItem {
           fieldType == other.fieldType &&
           value == other.value &&
           suggested == other.suggested;
+}
+
+/// What reading an export back in did.
+class ImportItem {
+  /// The new space.
+  final String space;
+  final int kinds;
+  final int documents;
+
+  /// Versions whose file was not in the export.
+  final int missing;
+
+  /// What could not be taken over, and why.
+  final List<String> skipped;
+
+  const ImportItem({
+    required this.space,
+    required this.kinds,
+    required this.documents,
+    required this.missing,
+    required this.skipped,
+  });
+
+  @override
+  int get hashCode => space.hashCode ^ kinds.hashCode ^ documents.hashCode ^ missing.hashCode ^ skipped.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is ImportItem &&
+          runtimeType == other.runtimeType &&
+          space == other.space &&
+          kinds == other.kinds &&
+          documents == other.documents &&
+          missing == other.missing &&
+          skipped == other.skipped;
 }
 
 /// A kind of document of a space.

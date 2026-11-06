@@ -554,5 +554,22 @@
   "colourGrey": "grey",
   "colourBlackWhite": "black and white",
   "trim": "Trim the edges",
-  "saveScan": "Save as a document"
+  "saveScan": "Save as a document",
+  "exported": "Exported: {n} documents.",
+  "@exported": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "exportedMissing": "{n} versions are not on this device yet and are missing.",
+  "@exportedMissing": {
+    "placeholders": {
+      "n": {
+        "type": "int"
+      }
+    }
+  },
+  "more": "More"
 }

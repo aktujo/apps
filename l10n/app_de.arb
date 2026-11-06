@@ -92,5 +92,8 @@
   "colourGrey": "grau",
   "colourBlackWhite": "schwarzweiß",
   "trim": "Ränder beschneiden",
-  "saveScan": "Als Dokument speichern"
+  "saveScan": "Als Dokument speichern",
+  "exported": "Exportiert: {n} Dokumente.",
+  "exportedMissing": "{n} Versionen sind noch nicht auf diesem Gerät und fehlen.",
+  "more": "Mehr"
 }

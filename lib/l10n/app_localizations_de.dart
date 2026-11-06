@@ -1113,4 +1113,17 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get saveScan => 'Als Dokument speichern';
+
+  @override
+  String exported(int n) {
+    return 'Exportiert: $n Dokumente.';
+  }
+
+  @override
+  String exportedMissing(int n) {
+    return '$n Versionen sind noch nicht auf diesem Gerät und fehlen.';
+  }
+
+  @override
+  String get more => 'Mehr';
 }

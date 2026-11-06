@@ -4,6 +4,7 @@ import 'dart:async';
 import 'package:file_selector/file_selector.dart';
 import 'package:flutter/material.dart';
 
+import '../app/export.dart';
 import '../l10n/app_localizations.dart';
 import '../src/rust/api/archive.dart';
 import 'document_page.dart';
@@ -14,12 +15,17 @@ import 'sync_page.dart';
 
 /// The archive: its spaces, the documents of the chosen one, search, adding files and the bin.
 class HomePage extends StatefulWidget {
-  const HomePage({super.key, required this.archive, this.pickFiles});
+  const HomePage({super.key, required this.archive, this.pickFiles, this.saveTo, this.pickZip});
 
   final Archive archive;
 
   /// How files are chosen – the system's dialog, or paths given by a test.
   final Future<List<String>> Function()? pickFiles;
+
+  /// Where an export is saved on a computer, and which export is read in – the system's dialogs, or paths given by a
+  /// test.
+  final Future<String?> Function(String suggested)? saveTo;
+  final Future<String?> Function()? pickZip;
 
   @override
   State<HomePage> createState() => _HomePageState();
@@ -124,6 +130,28 @@ class _HomePageState extends State<HomePage> {
     }
   }
 
+  Future<void> _export() async {
+    final space = _space;
+    if (space == null) return;
+    await _run(() async {
+      final note = await exportSpace(context, _archive, space, saveTo: widget.saveTo);
+      if (note != null && mounted) setState(() => _message = note);
+    });
+  }
+
+  Future<void> _import() async {
+    if (!mounted) return;
+    final wide = MediaQuery.sizeOf(context).width >= 760;
+    if (!wide) Navigator.maybePop(context);
+    await _run(() async {
+      final result = await importSpace(context, _archive, pickZip: widget.pickZip);
+      if (result == null) return;
+      _space = result.$1;
+      if (mounted) setState(() => _message = result.$2);
+      await _load();
+    });
+  }
+
   Future<void> _openKinds() async {
     final space = _space;
     if (space == null) return;
@@ -225,9 +253,10 @@ class _HomePageState extends State<HomePage> {
       },
       onFound: _foundSpace,
       onJoin: _join,
+      onImport: _import,
     );
     final body = _space == null
-        ? _FirstSpace(onFound: _foundSpace, onJoin: _join)
+        ? _FirstSpace(onFound: _foundSpace, onJoin: _join, onImport: _import)
         : Column(
             children: [
               Padding(
@@ -284,6 +313,14 @@ class _HomePageState extends State<HomePage> {
               tooltip: l.syncTitle,
               onPressed: _openSync,
             ),
+          if (_space != null)
+            PopupMenuButton<String>(
+              tooltip: l.more,
+              onSelected: (choice) {
+                if (choice == 'export') _export();
+              },
+              itemBuilder: (context) => [PopupMenuItem(value: 'export', child: Text(l.spaceExport))],
+            ),
         ],
       ),
       drawer: wide ? null : Drawer(child: SafeArea(child: spaces)),
@@ -328,6 +365,7 @@ class _SpaceList extends StatelessWidget {
     required this.onChoose,
     required this.onFound,
     required this.onJoin,
+    required this.onImport,
   });
 
   final List<SpaceItem> spaces;
@@ -335,6 +373,7 @@ class _SpaceList extends StatelessWidget {
   final void Function(String) onChoose;
   final VoidCallback onFound;
   final VoidCallback onJoin;
+  final VoidCallback onImport;
 
   @override
   Widget build(BuildContext context) {
@@ -355,16 +394,18 @@ class _SpaceList extends StatelessWidget {
           ),
         ListTile(leading: const Icon(Icons.add), title: Text(l.spaceNew), onTap: onFound),
         ListTile(leading: const Icon(Icons.group_add), title: Text(l.settingsJoin), onTap: onJoin),
+        ListTile(leading: const Icon(Icons.unarchive_outlined), title: Text(l.importTitle), onTap: onImport),
       ],
     );
   }
 }
 
 class _FirstSpace extends StatelessWidget {
-  const _FirstSpace({required this.onFound, required this.onJoin});
+  const _FirstSpace({required this.onFound, required this.onJoin, required this.onImport});
 
   final VoidCallback onFound;
   final VoidCallback onJoin;
+  final VoidCallback onImport;
 
   @override
   Widget build(BuildContext context) {
@@ -382,6 +423,7 @@ class _FirstSpace extends StatelessWidget {
             FilledButton(onPressed: onFound, child: Text(l.spaceNew)),
             const SizedBox(height: 8),
             TextButton(onPressed: onJoin, child: Text(l.settingsJoin)),
+            TextButton(onPressed: onImport, child: Text(l.importTitle)),
           ],
         ),
       ),

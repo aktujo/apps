@@ -16,7 +16,9 @@ use aktujo_sdk::{
     Reader, Rights, Search, SpaceId, Standing, Step, SyncReport, Syncer, TemplateOrigin, Value, Weighted, Worker,
     Workspace, date_of, fetch_catalog, fetch_template, kind_id, media_type_of, source_url,
 };
-use aktujo_sdk::{Colour, Crop, Improve, VersionFile, combined, preview_png};
+use aktujo_sdk::{
+    Colour, Crop, Improve, VersionFile, Zip, ZipFiles, combined, export, export_name, import, preview_png,
+};
 
 /// How often synchronised spaces are synchronised, besides after every change.
 const SYNC_EVERY: Duration = Duration::from_secs(60);
@@ -285,6 +287,28 @@ fn value_of(field_type: FieldType, text: &str) -> Result<Value, String> {
     };
     value.check().map_err(|e| e.to_string())?;
     Ok(value)
+}
+
+/// What an export wrote.
+#[derive(Debug, Clone)]
+pub struct ExportItem {
+    /// The documents, in the bin or not.
+    pub documents: u32,
+    /// Originals whose bytes are not on this device (yet) – their files are missing.
+    pub missing: u32,
+}
+
+/// What reading an export back in did.
+#[derive(Debug, Clone)]
+pub struct ImportItem {
+    /// The new space.
+    pub space: String,
+    pub kinds: u32,
+    pub documents: u32,
+    /// Versions whose file was not in the export.
+    pub missing: u32,
+    /// What could not be taken over, and why.
+    pub skipped: Vec<String>,
 }
 
 /// How scanned pages are improved.
@@ -653,6 +677,58 @@ impl Archive {
         self.worker.wake();
         self.changed();
         Ok(added.document.to_string())
+    }
+
+    // Export and import
+
+    /// The name an export of a space gets: `aktujo <space> <day>.zip`.
+    pub fn export_file_name(&self, space: String) -> Result<String, String> {
+        let space = space_id(&space)?;
+        let name =
+            self.lock().spaces().map_err(|e| e.to_string())?.into_iter().find(|s| s.id == space).and_then(|s| s.name);
+        let now =
+            std::time::SystemTime::now().duration_since(std::time::UNIX_EPOCH).map_or(0, |d| d.as_millis() as u64);
+        Ok(format!("{}.zip", export_name(name.as_deref(), now)))
+    }
+
+    /// Exports a space as a ZIP to `path` – every document with its versions, what was read, the state as JSON and
+    /// the events; readable without aktujo and **not encrypted**. A file that is there is not overwritten.
+    pub fn export_space(&self, space: String, path: String) -> Result<ExportItem, String> {
+        let space = space_id(&space)?;
+        let prefix = Path::new(&path)
+            .file_stem()
+            .and_then(|s| s.to_str())
+            .filter(|s| !s.is_empty())
+            .unwrap_or("aktujo export")
+            .to_owned();
+        let file = std::fs::File::create_new(&path).map_err(|e| format!("{path}: {e}"))?;
+        let mut zip = Zip::new(std::io::BufWriter::new(file), &prefix);
+        let exported = export(&self.workspace, &space, &mut zip);
+        let flushed = zip.into_inner().into_inner().map_err(|e| e.to_string());
+        if exported.is_err() || flushed.is_err() {
+            let _ = std::fs::remove_file(&path);
+        }
+        let exported = exported.map_err(|e| e.to_string())?;
+        flushed?;
+        Ok(ExportItem { documents: exported.documents as u32, missing: exported.missing as u32 })
+    }
+
+    /// Reads an export – a ZIP aktujo wrote – back in as a new space named `name` (or as the exported one was): the
+    /// kinds, documents with their versions, titles, confirmed kinds and fields, labels and the bin. Its history starts
+    /// now; the text is read again.
+    pub fn import_space(&self, path: String, name: Option<String>) -> Result<ImportItem, String> {
+        let file = std::fs::File::open(&path).map_err(|e| format!("{path}: {e}"))?;
+        let mut files = ZipFiles::open(std::io::BufReader::new(file)).map_err(|e| e.to_string())?;
+        let imported = import(&self.workspace, &mut files, optional(name).as_deref()).map_err(|e| e.to_string())?;
+        self.worker.wake();
+        self.changed();
+        Ok(ImportItem {
+            space: imported.space.to_string(),
+            kinds: imported.kinds as u32,
+            documents: imported.documents as u32,
+            missing: imported.missing as u32,
+            skipped: imported.skipped,
+        })
     }
 
     // Sync and sharing
@@ -1217,6 +1293,38 @@ mod tests {
             2
         );
         // The reader in the background may still write; the folder is temporary anyway.
+        let _ = std::fs::remove_dir_all(&folder);
+    }
+
+    #[test]
+    fn a_space_is_exported_and_read_back_in() {
+        let folder = std::env::temp_dir().join(format!("aktujo-bridge-export-{}", std::process::id()));
+        let _ = std::fs::remove_dir_all(&folder);
+        std::fs::create_dir_all(&folder).unwrap();
+        let archive = Archive::open(folder.join("data").to_string_lossy().into_owned(), None).unwrap();
+        let space = archive.found_space("Home / Office".into()).unwrap();
+        let file = folder.join("Lease.pdf");
+        std::fs::write(&file, b"%PDF-1.4 lease").unwrap();
+        archive.add_files(space.clone(), vec![file.to_string_lossy().into_owned()]).unwrap();
+        let document = archive.documents(space.clone(), String::new(), false).unwrap().remove(0).id;
+        archive.add_label(space.clone(), document, "Flat".into()).unwrap();
+        archive.add_kind(space.clone(), "Contract".into()).unwrap();
+
+        let name = archive.export_file_name(space.clone()).unwrap();
+        assert!(name.starts_with("aktujo Home _ Office ") && name.ends_with(".zip"), "{name}");
+        let zip = folder.join(&name).to_string_lossy().into_owned();
+        let exported = archive.export_space(space.clone(), zip.clone()).unwrap();
+        assert_eq!((exported.documents, exported.missing), (1, 0));
+        assert!(archive.export_space(space, zip.clone()).is_err(), "nothing is overwritten");
+
+        let imported = archive.import_space(zip, Some("Home again".into())).unwrap();
+        assert_eq!((imported.kinds, imported.documents, imported.missing), (1, 1, 0));
+        assert!(imported.skipped.is_empty(), "{:?}", imported.skipped);
+        let again = archive.documents(imported.space.clone(), String::new(), false).unwrap();
+        assert_eq!((again[0].title.as_str(), again[0].labels.as_slice()), ("Lease", &["Flat".to_owned()][..]));
+        assert!(archive.spaces().unwrap().iter().any(|s| s.name == "Home again"));
+        let not_a_zip = folder.join("Lease.pdf").to_string_lossy().into_owned();
+        assert!(archive.import_space(not_a_zip, None).is_err());
         let _ = std::fs::remove_dir_all(&folder);
     }
 

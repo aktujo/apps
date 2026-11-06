@@ -312,4 +312,54 @@ void main() {
     await keptKeys.delete(key: keyName);
     await scratch.delete(recursive: true);
   });
+
+  testWidgets('a space is exported as a ZIP and read back in as a new one', (tester) async {
+    final scratch = await Directory.systemTemp.createTemp('aktujo-app-export');
+    const keyName = 'aktujo.data-folder.test-export';
+    await keptKeys.delete(key: keyName);
+    final archive = await openArchive(folder: '${scratch.path}/data', keyName: keyName);
+    final space = await archive.foundSpace(name: 'Home');
+    final file = File('${scratch.path}/Lease.pdf')..writeAsBytesSync('%PDF-1.4 lease'.codeUnits);
+    await archive.addFiles(space: space, paths: [file.path]);
+    String? zip;
+
+    await tester.pumpWidget(
+      AktujoApp(
+        locale: const Locale('en'),
+        home: HomePage(
+          archive: archive,
+          saveTo: (suggested) async => zip = '${scratch.path}/$suggested',
+          pickZip: () async => zip,
+        ),
+      ),
+    );
+    await waitFor(tester, find.text('Lease'));
+    await tester.tap(find.byTooltip('More'));
+    await tester.pumpAndSettle();
+    await tester.tap(find.text('Export').last);
+    await tester.pumpAndSettle();
+    expect(find.textContaining('not encrypted'), findsOneWidget);
+    await tester.tap(find.widgetWithText(FilledButton, 'Export'));
+    await waitFor(tester, find.text('Exported: 1 documents.'));
+    expect(find.text('Exported: 1 documents.'), findsOneWidget);
+    expect(File(zip!).existsSync(), isTrue);
+    expect(zip!.endsWith('.zip'), isTrue);
+
+    final drawer = find.byTooltip('Open navigation menu');
+    if (drawer.evaluate().isNotEmpty) {
+      await tester.tap(drawer);
+      await tester.pumpAndSettle();
+    }
+    await tester.tap(find.text('Read an export back in'));
+    await tester.pumpAndSettle();
+    await tester.enterText(find.byType(TextField).last, 'Home again');
+    await tester.tap(find.widgetWithText(FilledButton, 'Read in'));
+    await waitFor(tester, find.textContaining('Read in: 1 documents'));
+    expect(find.textContaining('Read in: 1 documents'), findsOneWidget);
+    final spaces = await archive.spaces();
+    expect(spaces.map((s) => s.name), containsAll(['Home', 'Home again']));
+
+    await keptKeys.delete(key: keyName);
+    await scratch.delete(recursive: true);
+  });
 }

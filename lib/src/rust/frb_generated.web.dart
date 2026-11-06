@@ -57,6 +57,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   DocumentItem dco_decode_document_item(dynamic raw);
 
   @protected
+  ExportItem dco_decode_export_item(dynamic raw);
+
+  @protected
   double dco_decode_f_32(dynamic raw);
 
   @protected
@@ -64,6 +67,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   FieldItem dco_decode_field_item(dynamic raw);
+
+  @protected
+  ImportItem dco_decode_import_item(dynamic raw);
 
   @protected
   KindItem dco_decode_kind_item(dynamic raw);
@@ -192,6 +198,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   DocumentItem sse_decode_document_item(SseDeserializer deserializer);
 
   @protected
+  ExportItem sse_decode_export_item(SseDeserializer deserializer);
+
+  @protected
   double sse_decode_f_32(SseDeserializer deserializer);
 
   @protected
@@ -199,6 +208,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   FieldItem sse_decode_field_item(SseDeserializer deserializer);
+
+  @protected
+  ImportItem sse_decode_import_item(SseDeserializer deserializer);
 
   @protected
   KindItem sse_decode_kind_item(SseDeserializer deserializer);
@@ -333,6 +345,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_document_item(DocumentItem self, SseSerializer serializer);
 
   @protected
+  void sse_encode_export_item(ExportItem self, SseSerializer serializer);
+
+  @protected
   void sse_encode_f_32(double self, SseSerializer serializer);
 
   @protected
@@ -340,6 +355,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_field_item(FieldItem self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_import_item(ImportItem self, SseSerializer serializer);
 
   @protected
   void sse_encode_kind_item(KindItem self, SseSerializer serializer);

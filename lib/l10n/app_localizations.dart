@@ -2095,6 +2095,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Save as a document'**
   String get saveScan;
+
+  /// No description provided for @exported.
+  ///
+  /// In en, this message translates to:
+  /// **'Exported: {n} documents.'**
+  String exported(int n);
+
+  /// No description provided for @exportedMissing.
+  ///
+  /// In en, this message translates to:
+  /// **'{n} versions are not on this device yet and are missing.'**
+  String exportedMissing(int n);
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
