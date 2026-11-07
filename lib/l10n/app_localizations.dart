@@ -1334,6 +1334,12 @@ abstract class AppLocalizations {
   /// **'Improve'**
   String get improveSteps;
 
+  /// No description provided for @improveCorners.
+  ///
+  /// In en, this message translates to:
+  /// **'Find the sheet and correct its perspective (photos of paper)'**
+  String get improveCorners;
+
   /// No description provided for @improveDeskew.
   ///
   /// In en, this message translates to:

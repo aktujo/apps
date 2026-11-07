@@ -696,6 +696,9 @@ class AppLocalizationsDe extends AppLocalizations {
   String get improveSteps => 'Verbessern';
 
   @override
+  String get improveCorners => 'Blatt finden und Perspektive entzerren (Fotos von Papier)';
+
+  @override
   String get improveDeskew => 'Gerade richten (schief gescannte Seiten)';
 
   @override
